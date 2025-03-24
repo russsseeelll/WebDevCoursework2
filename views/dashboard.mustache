@@ -41,7 +41,7 @@
 
                                 <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editCourseModal-{{_id}}">Edit</button>
 
-                                <form action="/courses/delete" method="POST" style="display:inline;">
+                                <form action="/api/courses/delete" method="POST" style="display:inline;">
                                     <input type="hidden" name="courseId" value="{{_id}}">
                                     <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                                 </form>
@@ -81,7 +81,7 @@
 
                                 <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editClassModal-{{_id}}">Edit</button>
 
-                                <form action="/classes/delete" method="POST" style="display:inline;">
+                                <form action="/api/classes/delete" method="POST" style="display:inline;">
                                     <input type="hidden" name="classId" value="{{_id}}">
                                     <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                                 </form>
@@ -138,7 +138,7 @@
 <div class="modal fade" id="addCourseModal" tabindex="-1" aria-labelledby="addCourseModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form action="/courses/add" method="POST" novalidate>
+            <form action="/api/courses/add" method="POST" novalidate>
                 <div class="modal-header">
                     <h5 class="modal-title" id="addCourseModalLabel">Add New Course</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -242,7 +242,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
 
-                <form action="/courses/edit" method="POST" novalidate>
+                <form action="/api/courses/edit" method="POST" novalidate>
                     <input type="hidden" name="courseId" value="{{_id}}">
                     <div class="modal-header">
                         <h5 class="modal-title" id="editCourseModalLabel-{{_id}}">Edit Course - {{name}}</h5>
@@ -372,7 +372,7 @@
 <div class="modal fade" id="addClassModal" tabindex="-1" aria-labelledby="addClassModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form action="/classes/add" method="POST" novalidate>
+            <form action="/api/classes/add" method="POST" novalidate>
                 <div class="modal-header">
                     <h5 class="modal-title" id="addClassModalLabel">Add New Class</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -416,7 +416,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
 
-                <form action="/classes/edit" method="POST" novalidate>
+                <form action="/api/classes/edit" method="POST" novalidate>
                     <input type="hidden" name="classId" value="{{_id}}">
                     <div class="modal-header">
                         <h5 class="modal-title" id="editClassModalLabel-{{_id}}">Edit Class - {{name}}</h5>
@@ -470,7 +470,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
 
-            <form action="/classes/timeslots/update" method="POST" novalidate>
+            <form action="/api/classes/timeslots/update" method="POST" novalidate>
                 <div class="modal-header">
                     <h5 class="modal-title" id="timeslotManagementModalLabel">Timeslot Management for <span id="tmClassName"></span></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -546,7 +546,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
 
-            <form action="/users/add" method="POST" novalidate>
+            <form action="/api/users/add" method="POST" novalidate>
                 <div class="modal-header">
                     <h5 class="modal-title" id="addUserModalLabel">Add New User</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -590,7 +590,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
 
-                <form action="/users/edit" method="POST" novalidate>
+                <form action="/api/users/edit" method="POST" novalidate>
                     <input type="hidden" name="userId" value="{{_id}}">
                     <div class="modal-header">
                         <h5 class="modal-title" id="editUserModalLabel-{{_id}}">Edit User - {{name}}</h5>
