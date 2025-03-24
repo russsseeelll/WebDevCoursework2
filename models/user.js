@@ -2,7 +2,6 @@
 const Datastore = require('nedb');
 const path = require('path');
 
-// Create and load the datastore for users
 const db = new Datastore({
     filename: path.join(__dirname, '../data/users.db'),
     autoload: true
