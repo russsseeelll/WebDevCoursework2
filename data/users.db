@@ -1,2 +1,3 @@
-{"name":"Dummy Admin","email":"dummy@dummy.com","role":"organiser","password":"password","_id":"pl699YWk0mxyfteV"}
+{"name":"Login Test User","email":"loginuser@example.com","role":"user","password":"password123","_id":"Rr6GMwG5KrJrBnWQ"}
 {"name":"Jonny","email":"jon.d@gmail.com","role":"user","password":"12345678","_id":"lhkbvuDZIMv58pyr"}
+{"name":"Dummy Admin","email":"dummy@dummy.com","role":"organiser","password":"password","_id":"pl699YWk0mxyfteV"}

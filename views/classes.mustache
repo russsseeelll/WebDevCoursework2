@@ -1,17 +1,17 @@
-<div class="page-content">
-    <h2 class="mb-4 text-center">Ad-Hoc Classes</h2>
-    <div class="row">
+<div class="page-content container py-5">
+    <h2 class="mb-5 text-center display-5 fw-bold">Ad-Hoc Classes</h2>
+    <div class="row g-4">
         {{#classes}}
-            <div class="col-md-6 mb-4">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body">
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-lg">
+                    <div class="card-body d-flex flex-column">
                         <h5 class="card-title">{{name}}</h5>
-                        <p class="card-text">{{description}}</p>
-                        <ul class="list-unstyled">
-                            <li><strong>Location:</strong> {{location}}</li>
-                            <li><strong>Price:</strong> £{{price}}</li>
+                        <p class="card-text text-muted flex-grow-1">{{description}}</p>
+                        <ul class="list-unstyled mb-4">
+                            <li><i class="bi bi-geo-alt-fill text-secondary me-2"></i><strong>Location:</strong> {{location}}</li>
+                            <li><i class="bi bi-currency-pound text-secondary me-2"></i><strong>Price:</strong> £{{price}}</li>
                         </ul>
-                        <a href="/bookClass?class={{_id}}" class="btn btn-outline-primary">Book Now</a>
+                        <a href="/bookClass?class={{_id}}" class="btn btn-outline-primary">Book Class</a>
                     </div>
                 </div>
             </div>
