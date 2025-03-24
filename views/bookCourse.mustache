@@ -1,0 +1,95 @@
+<div class="page-content">
+    <h2 class="mb-4 text-center">Book Full Course: {{course.name}}</h2>
+    <p>{{course.description}}</p>
+    <p><strong>Time:</strong> {{course.startTime}} - {{course.endTime}}</p>
+    <p><strong>Location:</strong> {{course.location}}</p>
+    <p><strong>Course Duration:</strong> {{course.duration}} (Every
+        {{#course.schedule}}
+            <span class="badge bg-secondary">{{.}}</span>
+        {{/course.schedule}}
+        )</p>
+    <h5 class="mt-4">Course Dates:</h5>
+    <div id="courseDatesList" class="d-flex flex-wrap gap-2"></div>
+    <hr class="my-4">
+    <h5>Contact Details:</h5>
+    <form id="bookCourseForm" action="/bookCourse" method="POST" class="mt-3">
+        <input type="hidden" name="courseId" value="{{course._id}}">
+        <input type="hidden" name="selectedDates" id="selectedDatesInput" value="">
+        <div class="mb-3">
+            <label for="contactName" class="form-label">Your Name</label>
+            <input type="text" class="form-control" id="contactName" name="contactName" placeholder="Enter your name" required>
+        </div>
+        <div class="mb-3">
+            <label for="contactEmail" class="form-label">Email</label>
+            <input type="email" class="form-control" id="contactEmail" name="contactEmail" placeholder="Enter your email" required>
+        </div>
+        <div class="mb-3">
+            <label for="contactMobile" class="form-label">Mobile</label>
+            <input type="tel" class="form-control" id="contactMobile" name="contactMobile" placeholder="Enter your mobile number" required>
+        </div>
+        <div class="alert alert-info" role="alert">
+            Please ensure to bring cash to your first course.
+        </div>
+        <button type="submit" class="btn btn-primary">Confirm Booking</button>
+    </form>
+</div>
+
+<!-- Hidden element to pass course data -->
+<div id="courseData" data-duration="{{course.duration}}" data-schedule="{{#course.schedule}}{{.}},{{/course.schedule}}"></div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const courseData = document.getElementById('courseData');
+        const duration = parseInt(courseData.getAttribute('data-duration'), 10);
+        const scheduleStr = courseData.getAttribute('data-schedule');
+        const schedule = scheduleStr.split(',').filter(day => day.trim() !== "");
+
+        function getAvailableDates(duration, schedule) {
+            const availableDates = [];
+            const today = new Date();
+            const endDate = new Date();
+            endDate.setDate(today.getDate() + duration * 7);
+            const weekdayMap = {
+                "Sunday": 0,
+                "Monday": 1,
+                "Tuesday": 2,
+                "Wednesday": 3,
+                "Thursday": 4,
+                "Friday": 5,
+                "Saturday": 6
+            };
+            const scheduledDays = schedule.map(day => weekdayMap[day]);
+            for (let d = new Date(today); d <= endDate; d.setDate(d.getDate() + 1)) {
+                if (scheduledDays.includes(d.getDay())) {
+                    const yyyy = d.getFullYear();
+                    let mm = d.getMonth() + 1;
+                    let dd = d.getDate();
+                    if (mm < 10) mm = '0' + mm;
+                    if (dd < 10) dd = '0' + dd;
+                    availableDates.push(`${yyyy}-${mm}-${dd}`);
+                }
+            }
+            return availableDates;
+        }
+
+        const availableDates = getAvailableDates(duration, schedule);
+        const datesList = document.getElementById('courseDatesList');
+        datesList.innerHTML = "";
+        availableDates.forEach(dateStr => {
+            const parts = dateStr.split('-');
+            const formatted = parts[2] + '-' + parts[1] + '-' + parts[0];
+            const span = document.createElement('span');
+            span.className = 'badge bg-light border text-dark date-badge';
+            span.textContent = formatted;
+            datesList.appendChild(span);
+        });
+        document.getElementById('selectedDatesInput').value = availableDates.join(',');
+    });
+</script>
+
+<style>
+    #courseDatesList .date-badge {
+        font-size: 0.9rem;
+        padding: 0.5rem 0.75rem;
+    }
+</style>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{title}}</title>
+
+    <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+{{> navbar}}
+{{#showHero}}
+    {{> hero}}
+{{/showHero}}
+<div class="container mt-4">
+    {{{body}}}
+
+    {{#error}}
+        <div class="flash-message flash-error">
+            {{.}}
+        </div>
+    {{/error}}
+    {{#success}}
+        <div class="flash-message flash-success">
+            {{.}}
+        </div>
+    {{/success}}
+
+</div>
+{{> footer}}
+
+<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/js/script.js"></script>
+</body>
+</html>

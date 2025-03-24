@@ -1,0 +1,51 @@
+<!-- views/bookClass.mustache -->
+<div class="page-content">
+    <h2 class="mb-4 text-center">Book Class: {{classInfo.name}}</h2>
+    <p>{{classInfo.description}}</p>
+    <p><strong>Available Times:</strong></p>
+    <div id="availableClassTimes" class="d-flex flex-wrap gap-2 mb-3">
+        {{#classInfo.timeslots}}
+            <button type="button" class="btn btn-outline-secondary class-time-btn" data-time="{{.}}">
+                {{.}}
+            </button>
+        {{/classInfo.timeslots}}
+    </div>
+    <p><strong>Location:</strong> {{classInfo.location}}</p>
+    <p><strong>Price:</strong> {{classInfo.price}}</p>
+    <hr class="my-4">
+    <h5>Contact Details:</h5>
+    <form id="bookClassForm" action="/bookClass" method="POST">
+        <input type="hidden" name="classId" value="{{classInfo._id}}">
+        <input type="hidden" id="selectedClassTimeInput" name="selectedTime" value="">
+        <div class="mb-3">
+            <label for="contactNameClass" class="form-label">Your Name</label>
+            <input type="text" class="form-control" id="contactNameClass" name="contactName" placeholder="Enter your name" required>
+        </div>
+        <div class="mb-3">
+            <label for="contactEmailClass" class="form-label">Email</label>
+            <input type="email" class="form-control" id="contactEmailClass" name="contactEmail" placeholder="Enter your email" required>
+        </div>
+        <div class="mb-3">
+            <label for="contactMobileClass" class="form-label">Mobile</label>
+            <input type="tel" class="form-control" id="contactMobileClass" name="contactMobile" placeholder="Enter your mobile number" required>
+        </div>
+        <div class="alert alert-info" role="alert">
+            Please ensure to bring cash for each class you attend.
+        </div>
+        <button type="submit" class="btn btn-primary">Confirm Booking</button>
+    </form>
+</div>
+<script>
+    const timeButtons = document.querySelectorAll('.class-time-btn');
+    timeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            timeButtons.forEach(btn => {
+                btn.classList.remove('btn-success');
+                btn.classList.add('btn-outline-secondary');
+            });
+            this.classList.remove('btn-outline-secondary');
+            this.classList.add('btn-success');
+            document.getElementById('selectedClassTimeInput').value = this.getAttribute('data-time');
+        });
+    });
+</script>
