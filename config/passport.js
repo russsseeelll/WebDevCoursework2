@@ -30,8 +30,6 @@ passport.use('github-login', new GitHubStrategy({
         return done(new Error('No email associated with this account'));
     }
     const name = profile.displayName || profile.username;
-    // Here you can use req to determine if you want to update an existing user or create a new one.
-    // For simplicity, we'll return a user object with email and name.
     return done(null, { email, name });
 }));
 
