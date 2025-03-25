@@ -16,14 +16,28 @@
                 <li class="nav-item">
                     <a class="nav-link {{#active.classes}}active{{/active.classes}}" href="/classes">Classes</a>
                 </li>
-                {{#user}}
+                {{#user.isOrganiser}}
                     <li class="nav-item">
                         <a class="nav-link {{#active.dashboard}}active{{/active.dashboard}}" href="/dashboard">Admin</a>
+                    </li>
+                {{/user.isOrganiser}}
+                {{#user}}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li class="dropdown-item-text">Hi, {{user.name}}!</li>
+                            <li><a class="dropdown-item" href="#">Manage Bookings</a></li>
+                            <li><a class="dropdown-item" href="#">Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/auth/logout">Logout</a></li>
+                        </ul>
                     </li>
                 {{/user}}
                 {{^user}}
                     <li class="nav-item">
-                        <a class="nav-link {{#active.login}}active{{/active.login}}" href="/login">Login</a>
+                        <a class="nav-link {{#active.login}}active{{/active.login}}" href="/auth/login">Login</a>
                     </li>
                 {{/user}}
             </ul>

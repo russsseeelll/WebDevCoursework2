@@ -6,18 +6,18 @@ const flash = require('connect-flash');
 
 const app = express();
 
-// Configure Mustache templating engine
+// Configure Mustache templating engine.
 app.engine('mustache', mustacheExpress(path.join(__dirname, 'views/partials'), '.mustache'));
 app.set('view engine', 'mustache');
 app.set('views', path.join(__dirname, 'views'));
 
-// Serve static files
+// Serve static files.
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Parse URL-encoded bodies
+// Parse URL-encoded bodies.
 app.use(express.urlencoded({ extended: true }));
 
-// Setup session and flash middleware
+// Setup session and flash middleware.
 app.use(session({
     secret: 'your-secret-key',
     resave: false,
@@ -30,11 +30,22 @@ app.use((req, res, next) => {
     next();
 });
 app.use((req, res, next) => {
-    res.locals.user = req.session.user || null;
+    if (req.session.user) {
+        // Add an isOrganiser flag to help with conditional rendering.
+        res.locals.user = {
+            email: req.session.user.email,
+            role: req.session.user.role,
+            name: req.session.user.name,
+            isOrganiser: req.session.user.role === 'organiser'
+        };
+    } else {
+        res.locals.user = null;
+    }
     next();
 });
 
-// Custom render helper to include layouts
+
+// Custom render helper to include layouts.
 app.use((req, res, next) => {
     res.renderWithLayout = (view, options = {}) => {
         app.render(view, options, (err, html) => {
@@ -46,19 +57,26 @@ app.use((req, res, next) => {
     next();
 });
 
-// Import and use routes
+// Initialize Passport.
+const passport = require('./config/passport');
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Import and use routes.
 const indexRoutes = require('./routes/index');
 app.use('/', indexRoutes);
 
+// Mount authentication routes under /auth.
+const authRoutes = require('./routes/auth');
+app.use('/auth', authRoutes);
+
+// Other routes (API endpoints) remain unchanged.
 const dashboardRoutes = require('./routes/dashboard');
 app.use('/dashboard', dashboardRoutes);
-
 const coursesRoutes = require('./routes/courses');
 app.use('/api/courses', coursesRoutes);
-
 const classesRoutes = require('./routes/classes');
 app.use('/api/classes', classesRoutes);
-
 const usersRoutes = require('./routes/users');
 app.use('/api/users', usersRoutes);
 

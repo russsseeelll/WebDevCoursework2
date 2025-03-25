@@ -1,3 +1,17 @@
-{"name":"Login Test User","email":"loginuser@example.com","role":"user","password":"password123","_id":"Rr6GMwG5KrJrBnWQ"}
+{"name":"russsseeelll","email":"russellmci@hotmail.co.uk","password":"b64c147857f57d428672d42e0f51b1c55e08b656a1ae76c3dac5f1a6bb1d0b66","role":"organiser","_id":"Pi5UMavftloTnmpn"}
+{"name":"Login Test User","email":"loginuser@example.com","role":"user","password":"password123","_id":"Z77TyYIQFMg62nyg"}
+{"name":"Login Test User","email":"loginuser@example.com","role":"user","password":"password123","_id":"kiePNTM5MGdBeh21"}
 {"name":"Jonny","email":"jon.d@gmail.com","role":"user","password":"12345678","_id":"lhkbvuDZIMv58pyr"}
+{"name":"Andy","email":"andy1@gmail.com","password":"12345678","role":"user","_id":"oZKtqCGHQaBTyVOq"}
+{"name":"jon","email":"jon@gmail.com","password":"12345678","role":"user","_id":"pU6ANZ90iGp5k8PA"}
+{"name":"jon","email":"jon1@gmail.com","password":"12345678","role":"user","_id":"pjiS9YMe59BqdduU"}
 {"name":"Dummy Admin","email":"dummy@dummy.com","role":"organiser","password":"password","_id":"pl699YWk0mxyfteV"}
+{"name":"Login Test User","email":"loginuser@example.com","role":"user","password":"password123","_id":"v3uNpYzvBqa4vqJo"}
+{"name":"Test User","email":"testuser@example.com","role":"user","password":"password123","_id":"bnJIwp5p5FDxru3y"}
+{"name":"Updated Test User","email":"testuser@example.com","role":"organiser","password":"password123","_id":"bnJIwp5p5FDxru3y"}
+{"$$deleted":true,"_id":"bnJIwp5p5FDxru3y"}
+{"name":"Login Test User","email":"loginuser@example.com","role":"user","password":"password123","_id":"nrwd67Rz1VaH2Ahr"}
+{"name":"Test Reg User","email":"testreg1742943566671@example.com","password":"password123","role":"user","_id":"xsDcCjxzg2Fcbt0I"}
+{"name":"Test Logout User","email":"testlogout1742943566673@example.com","password":"password123","role":"user","_id":"InCP8HysbRr8XXT9"}
+{"name":"Non-Organiser User","email":"testnonorg1742943566679@example.com","password":"password123","role":"user","_id":"mjyu3n45ej44nADs"}
+{"name":"Organiser User","email":"testorg1742943566683@example.com","role":"organiser","password":"password123","_id":"83013OpBCwPDMwHM"}

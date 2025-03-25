@@ -26,10 +26,13 @@ exports.getDashboard = (req, res) => {
     });
 };
 
-// middleware to check for organiser authentication
 exports.isAuthedAsOrganiser = (req, res, next) => {
     if (req.session && req.session.user && req.session.user.role === 'organiser') {
         return next();
     }
-    res.redirect('/login');
+    if (req.session && req.session.user) {
+        return res.redirect('/');
+    }
+    return res.redirect('/auth/login');
 };
+
