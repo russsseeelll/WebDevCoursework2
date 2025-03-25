@@ -1,8 +1,12 @@
 /**
  * controllers/Controller.js
+ *
+ * Handles public-facing pages:
+ * - Home page
+ * - Courses and classes pages
+ * - Booking endpoints for full courses and individual classes
  */
 
-const userModel = require('../models/user');
 const classModel = require('../models/class');
 const courseModel = require('../models/course');
 
@@ -13,46 +17,6 @@ exports.getHome = (req, res) => {
         year: new Date().getFullYear(),
         showHero: true
     });
-};
-
-exports.getLogin = (req, res) => {
-    if (req.session.user) return res.redirect('/dashboard');
-    res.renderWithLayout('login', {
-        title: 'Login',
-        active: { login: true },
-        year: new Date().getFullYear()
-    });
-};
-
-exports.postLogin = (req, res) => {
-    const { email, password } = req.body;
-    userModel.getUserByEmail(email, (err, user) => {
-        if (err || !user) {
-            req.flash('error', 'Login failed. Please try again.');
-            return res.redirect('/login');
-        }
-        if (user.password === password) {
-            req.session.user = { email: user.email, role: user.role, name: user.name };
-            return res.redirect('/dashboard');
-        }
-        req.flash('error', 'Invalid credentials.');
-        return res.redirect('/login');
-    });
-};
-
-exports.getRegister = (req, res) => {
-    if (req.session.user) return res.redirect('/');
-    res.renderWithLayout('register', {
-        title: 'Register',
-        active: { register: true },
-        year: new Date().getFullYear()
-    });
-};
-
-exports.postRegister = (req, res) => {
-    // Registration logic can be implemented here.
-    // For now, simply redirect to login.
-    res.redirect('/login');
 };
 
 exports.getCoursesPage = (req, res) => {
