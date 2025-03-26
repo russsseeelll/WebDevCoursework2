@@ -1,5 +1,12 @@
-{"name":"Booking Test Class","description":"Class for booking test","location":"Test Location","price":75,"timeslots":[],"participants":[],"_id":"AdkxIYptx0Ckp8YS"}
-{"name":"SPIN CLASS","description":"Biking","location":"Glasgow office - studio 1","price":10,"timeslots":["25/04/2025 - 09:00 - 10:00","27/03/2025 - 13:00 - 14:00"],"participants":[],"_id":"JDD18Wink3Ah3qnr"}
-{"name":"YOGA SESSION","description":"Mind and body balance","location":"Glasgow office - studio 2","price":12,"timeslots":["26/04/2025 - 10:00 - 11:00","28/04/2025 - 17:00 - 18:00"],"participants":[],"_id":"bm2BlXONBY87VoIG"}
-{"name":"HIIT WORKOUT","description":"High intensity interval training","location":"Glasgow office - gym","price":15,"timeslots":["27/04/2025 - 08:00 - 09:00","29/04/2025 - 18:00 - 19:00"],"participants":[],"_id":"noxMXE9r6tIxAF5T"}
-{"name":"PILATES","description":"Core strength and flexibility","location":"Glasgow office - studio 3","price":14,"timeslots":["28/04/2025 - 11:00 - 12:00","30/04/2025 - 16:00 - 17:00"],"participants":[],"_id":"z6b11I2ptOxQxWm3"}
+{"name":"PILATES","description":"Core strength and flexibility","location":"Glasgow office - studio 3","price":14,"timeslots":["28/04/2025 - 11:00 - 12:00","30/04/2025 - 16:00 - 17:00"],"participants":[],"_id":"2RdYP0FtMnZh9r6R"}
+{"name":"SPIN CLASS","description":"Biking","location":"Glasgow office - studio 1","price":10,"timeslots":["25/04/2025 - 09:00 - 10:00","27/03/2025 - 13:00 - 14:00"],"participants":[],"_id":"LmGcPoDFepING5AQ"}
+{"name":"HIIT WORKOUT","description":"High intensity interval training","location":"Glasgow office - gym","price":15,"timeslots":["27/04/2025 - 08:00 - 09:00","29/04/2025 - 18:00 - 19:00"],"participants":[],"_id":"XszRVqq9DjpM4IKr"}
+{"name":"YOGA SESSION","description":"Mind and body balance","location":"Glasgow office - studio 2","price":12,"timeslots":["26/04/2025 - 10:00 - 11:00","28/04/2025 - 17:00 - 18:00"],"participants":[],"_id":"cJpk05ff70CEsJxW"}
+{"name":"Booking Test Class","description":"Class for booking test","location":"Test Location","price":75,"timeslots":[],"participants":[],"_id":"hzF1HQKXfXSnwZCi"}
+{"name":"Booking Test Class","description":"Class for booking test","location":"Test Location","price":75,"timeslots":[],"participants":[],"_id":"tVscBL8x3ufAxty2"}
+{"name":"Booking Test Class","description":"Class for booking test","location":"Test Location","price":75,"timeslots":[],"participants":[],"_id":"jq0tmU3TdRQSA8AJ"}
+{"name":"Test Class","description":"A test class description","location":"Test Class Location","price":50.25,"timeslots":[],"participants":[],"_id":"Z2mwrNh5epDYmFBt"}
+{"name":"Updated Test Class","description":"Updated class description","location":"Updated Location","price":60.5,"timeslots":[],"participants":[],"_id":"Z2mwrNh5epDYmFBt"}
+{"name":"Updated Test Class","description":"Updated class description","location":"Updated Location","price":60.5,"timeslots":["Monday 9am","Tuesday 10am"],"participants":[],"_id":"Z2mwrNh5epDYmFBt"}
+{"name":"Updated Test Class","description":"Updated class description","location":"Updated Location","price":60.5,"timeslots":["Monday 9am","Tuesday 10am"],"participants":[{"name":"John Doe","email":"john@example.com"}],"_id":"Z2mwrNh5epDYmFBt"}
+{"$$deleted":true,"_id":"Z2mwrNh5epDYmFBt"}

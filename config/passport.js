@@ -1,15 +1,18 @@
+const passport = require("passport");
+const userModel = require("../models/user");
+const crypto = require("crypto");
 require('dotenv').config();
-const crypto = require('crypto');
-const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const GitHubStrategy = require('passport-github2').Strategy;
-const userModel = require('../models/user');
 
 passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
     userModel.getUserByEmail(email, (err, user) => {
         if (err) return done(err);
         if (!user) return done(null, false, { message: 'Incorrect email.' });
         if (user.password !== password) return done(null, false, { message: 'Incorrect password.' });
+        if (user.isregistered === false) {
+            return done(null, false, { message: 'User not registered. Please complete registration.' });
+        }
         return done(null, user);
     });
 }));

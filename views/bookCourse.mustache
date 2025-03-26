@@ -1,3 +1,4 @@
+<!-- views/bookCourse.mustache -->
 <div class="page-content">
     <h2 class="mb-4 text-center">Book Course: {{course.name}}</h2>
     <p>{{course.description}}</p>
@@ -15,18 +16,55 @@
     <form id="bookCourseForm" action="/bookCourse" method="POST" class="mt-3">
         <input type="hidden" name="courseId" value="{{course._id}}">
         <input type="hidden" name="selectedDates" id="selectedDatesInput" value="">
+
+        <!-- Name Field -->
         <div class="mb-3">
             <label for="contactName" class="form-label">Your Name</label>
-            <input type="text" class="form-control" id="contactName" name="contactName" placeholder="Enter your name" required>
+            {{#user}}
+                {{#name}}
+                    <input type="text" class="form-control" id="contactName" name="contactName" value="{{name}}" readonly style="background-color: #e9ecef;">
+                {{/name}}
+                {{^name}}
+                    <input type="text" class="form-control" id="contactName" name="contactName" placeholder="Enter your name" required>
+                {{/name}}
+            {{/user}}
+            {{^user}}
+                <input type="text" class="form-control" id="contactName" name="contactName" placeholder="Enter your name" required>
+            {{/user}}
         </div>
+
+        <!-- Email Field -->
         <div class="mb-3">
             <label for="contactEmail" class="form-label">Email</label>
-            <input type="email" class="form-control" id="contactEmail" name="contactEmail" placeholder="Enter your email" required>
+            {{#user}}
+                {{#email}}
+                    <input type="email" class="form-control" id="contactEmail" name="contactEmail" value="{{email}}" readonly style="background-color: #e9ecef;">
+                {{/email}}
+                {{^email}}
+                    <input type="email" class="form-control" id="contactEmail" name="contactEmail" placeholder="Enter your email" required>
+                {{/email}}
+            {{/user}}
+            {{^user}}
+                <input type="email" class="form-control" id="contactEmail" name="contactEmail" placeholder="Enter your email" required>
+            {{/user}}
         </div>
+
+        <!-- Mobile Field -->
         <div class="mb-3">
             <label for="contactMobile" class="form-label">Mobile</label>
-            <input type="tel" class="form-control" id="contactMobile" name="contactMobile" placeholder="Enter your mobile number" required>
+            {{#user}}
+                {{#mobile}}
+                    <input type="tel" class="form-control" id="contactMobile" name="contactMobile" value="{{mobile}}" readonly style="background-color: #e9ecef;">
+                {{/mobile}}
+                {{^mobile}}
+                    <input type="tel" class="form-control" id="contactMobile" name="contactMobile" placeholder="Enter your mobile number" required>
+                {{/mobile}}
+            {{/user}}
+            {{^user}}
+                <input type="tel" class="form-control" id="contactMobile" name="contactMobile" placeholder="Enter your mobile number" required>
+            {{/user}}
         </div>
+
         <div class="alert alert-info" role="alert">
             Please ensure to bring cash to your first course.
         </div>
