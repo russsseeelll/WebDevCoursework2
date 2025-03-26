@@ -14,21 +14,58 @@
     <p><strong>Price:</strong> {{classInfo.price}}</p>
     <hr class="my-4">
     <h5>Contact Details:</h5>
-    <form id="bookClassForm" action="/bookClass" method="POST">
+    <form id="bookClassForm" action="/bookClass" method="POST" onsubmit="if(document.getElementById('selectedClassTimeInput').value===''){ alert('Please select a time.'); return false; }">
         <input type="hidden" name="classId" value="{{classInfo._id}}">
         <input type="hidden" id="selectedClassTimeInput" name="selectedTime" value="">
+
+        <!-- Name Field -->
         <div class="mb-3">
             <label for="contactNameClass" class="form-label">Your Name</label>
-            <input type="text" class="form-control" id="contactNameClass" name="contactName" placeholder="Enter your name" required>
+            {{#user}}
+                {{#name}}
+                    <input type="text" class="form-control" id="contactNameClass" name="contactName" value="{{name}}" readonly style="background-color: #e9ecef;">
+                {{/name}}
+                {{^name}}
+                    <input type="text" class="form-control" id="contactNameClass" name="contactName" placeholder="Enter your name" required>
+                {{/name}}
+            {{/user}}
+            {{^user}}
+                <input type="text" class="form-control" id="contactNameClass" name="contactName" placeholder="Enter your name" required>
+            {{/user}}
         </div>
+
+        <!-- Email Field -->
         <div class="mb-3">
             <label for="contactEmailClass" class="form-label">Email</label>
-            <input type="email" class="form-control" id="contactEmailClass" name="contactEmail" placeholder="Enter your email" required>
+            {{#user}}
+                {{#email}}
+                    <input type="email" class="form-control" id="contactEmailClass" name="contactEmail" value="{{email}}" readonly style="background-color: #e9ecef;">
+                {{/email}}
+                {{^email}}
+                    <input type="email" class="form-control" id="contactEmailClass" name="contactEmail" placeholder="Enter your email" required>
+                {{/email}}
+            {{/user}}
+            {{^user}}
+                <input type="email" class="form-control" id="contactEmailClass" name="contactEmail" placeholder="Enter your email" required>
+            {{/user}}
         </div>
+
+        <!-- Mobile Field -->
         <div class="mb-3">
             <label for="contactMobileClass" class="form-label">Mobile</label>
-            <input type="tel" class="form-control" id="contactMobileClass" name="contactMobile" placeholder="Enter your mobile number" required>
+            {{#user}}
+                {{#mobile}}
+                    <input type="tel" class="form-control" id="contactMobileClass" name="contactMobile" value="{{mobile}}" readonly style="background-color: #e9ecef;">
+                {{/mobile}}
+                {{^mobile}}
+                    <input type="tel" class="form-control" id="contactMobileClass" name="contactMobile" placeholder="Enter your mobile number" required>
+                {{/mobile}}
+            {{/user}}
+            {{^user}}
+                <input type="tel" class="form-control" id="contactMobileClass" name="contactMobile" placeholder="Enter your mobile number" required>
+            {{/user}}
         </div>
+
         <div class="alert alert-info" role="alert">
             Please ensure to bring cash for each class you attend.
         </div>

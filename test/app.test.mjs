@@ -1,8 +1,7 @@
 /**
  * test/app.test.mjs
  * -----------------
- * Test, test tests!!!!!!!!
- *
+ * Integration tests for the new logics and functionalities.
  */
 
 import request from 'supertest';
@@ -48,6 +47,7 @@ describe('Integration Tests', () => {
         let testClassId;
 
         before(async () => {
+            // Create a course for booking test via API.
             await request(app)
                 .post('/api/courses/add')
                 .type('form')
@@ -72,7 +72,7 @@ describe('Integration Tests', () => {
             const testCourse = courses.find(c => c.name === 'Booking Test Course');
             testCourseId = testCourse._id;
 
-            // Create a class for booking test
+            // Create a class for booking test via API.
             await request(app)
                 .post('/api/classes/add')
                 .type('form')
@@ -125,30 +125,138 @@ describe('Integration Tests', () => {
             expect(res.text).to.include('Book Class');
         });
 
-        it('POST /bookCourse should accept booking details and redirect to /courses', async () => {
+        // Existing tests for unregistered users remain.
+        it('POST /bookCourse by an unregistered user should add booking but not create session', async () => {
+            const uniqueEmail = `unreg${Date.now()}@example.com`;
             const res = await request(app)
                 .post('/bookCourse')
                 .type('form')
                 .send({
-                    course: testCourseId,
-                    bookingName: 'John Booking',
-                    bookingEmail: 'john.booking@example.com'
+                    contactName: 'Unregistered User',
+                    contactEmail: uniqueEmail,
+                    contactMobile: '0000000000',
+                    courseId: testCourseId,
+                    selectedDates: '2025-05-02,2025-05-09'
                 })
                 .expect(302);
             expect(res.header.location).to.equal('/courses');
+
+            const protectedRes = await request(app)
+                .get('/manageBookings')
+                .set('Cookie', res.headers['set-cookie'] || [])
+                .expect(302);
+            expect(protectedRes.header.location).to.equal('/auth/login');
         });
 
-        it('POST /bookClass should accept booking details and redirect to /classes', async () => {
+        it('POST /bookClass by an unregistered user should add booking but not create session', async () => {
+            const uniqueEmail = `unreg${Date.now()}@example.com`;
             const res = await request(app)
                 .post('/bookClass')
                 .type('form')
                 .send({
-                    class: testClassId,
-                    bookingName: 'Jane Booking',
-                    bookingEmail: 'jane.booking@example.com'
+                    contactName: 'Unregistered Class User',
+                    contactEmail: uniqueEmail,
+                    contactMobile: '0000000000',
+                    classId: testClassId,
+                    selectedTime: '28/04/2025 - 17:00 - 18:00'
                 })
                 .expect(302);
             expect(res.header.location).to.equal('/classes');
+
+            const protectedRes = await request(app)
+                .get('/manageBookings')
+                .set('Cookie', res.headers['set-cookie'] || [])
+                .expect(302);
+            expect(protectedRes.header.location).to.equal('/auth/login');
+        });
+
+        // --- New Tests for Registered Users ---
+        it('POST /bookCourse by a registered user should add booking and create session', async () => {
+            const agent = request.agent(app);
+            const uniqueEmail = `reg${Date.now()}@example.com`;
+
+            // Register and login.
+            await request(app)
+                .post('/auth/register')
+                .type('form')
+                .send({
+                    username: 'Reg User',
+                    email: uniqueEmail,
+                    password: 'password123'
+                })
+                .expect(302);
+            await agent
+                .post('/auth/login')
+                .type('form')
+                .send({
+                    email: uniqueEmail,
+                    password: 'password123'
+                })
+                .expect(302);
+
+            // Post a course booking.
+            const res = await agent
+                .post('/bookCourse')
+                .type('form')
+                .send({
+                    contactName: 'Reg User',
+                    contactEmail: uniqueEmail,
+                    contactMobile: '1111111111',
+                    courseId: testCourseId,
+                    selectedDates: '2025-05-02,2025-05-09'
+                })
+                .expect(302);
+            expect(res.header.location).to.equal('/courses');
+
+            // Verify session is active by accessing a protected route.
+            const protectedRes = await agent
+                .get('/manageBookings')
+                .expect(200);
+            expect(protectedRes.text).to.include('My Bookings');
+        });
+
+        it('POST /bookClass by a registered user should add booking and create session', async () => {
+            const agent = request.agent(app);
+            const uniqueEmail = `reg${Date.now()}@example.com`;
+
+            // Register and login.
+            await request(app)
+                .post('/auth/register')
+                .type('form')
+                .send({
+                    username: 'Reg Class User',
+                    email: uniqueEmail,
+                    password: 'password123'
+                })
+                .expect(302);
+            await agent
+                .post('/auth/login')
+                .type('form')
+                .send({
+                    email: uniqueEmail,
+                    password: 'password123'
+                })
+                .expect(302);
+
+            // Post a class booking.
+            const res = await agent
+                .post('/bookClass')
+                .type('form')
+                .send({
+                    contactName: 'Reg Class User',
+                    contactEmail: uniqueEmail,
+                    contactMobile: '2222222222',
+                    classId: testClassId,
+                    selectedTime: '28/04/2025 - 17:00 - 18:00'
+                })
+                .expect(302);
+            expect(res.header.location).to.equal('/classes');
+
+            // Verify session is active.
+            const protectedRes = await agent
+                .get('/manageBookings')
+                .expect(200);
+            expect(protectedRes.text).to.include('My Bookings');
         });
     });
 
@@ -390,7 +498,7 @@ describe('Integration Tests', () => {
     });
 
     // --------------------------------------------------
-    // Test Authentication (Login, Registration, Logout)
+    // Test Authentication (Login, Registration, Duplicate Merging)
     // --------------------------------------------------
     describe('Authentication', () => {
         const agent = request.agent(app);
@@ -445,6 +553,45 @@ describe('Integration Tests', () => {
                 })
                 .expect(302);
             expect(res.header.location).to.equal('/auth/login');
+        });
+
+        // Test duplicate merging & rejection of auto-login for unregistered user.
+        it('POST /auth/register should update an existing unregistered user and not auto-login them', async () => {
+            const duplicateEmail = `duplicate${Date.now()}@example.com`;
+            // Simulate an unregistered user booking which creates a record without session.
+            await request(app)
+                .post('/bookCourse')
+                .type('form')
+                .send({
+                    contactName: 'Duplicate User',
+                    contactEmail: duplicateEmail,
+                    contactMobile: '0000000000',
+                    courseId: 'dummyCourseId',
+                    selectedDates: '2025-05-02'
+                })
+                .expect(302);
+            // Now register with the same email.
+            const res = await request(app)
+                .post('/auth/register')
+                .type('form')
+                .send({
+                    username: 'Duplicate User Updated',
+                    email: duplicateEmail,
+                    password: 'newpassword'
+                })
+                .expect(302);
+            expect(res.header.location).to.equal('/auth/login');
+
+            // Attempt login with new password should succeed.
+            const loginRes = await request(app)
+                .post('/auth/login')
+                .type('form')
+                .send({
+                    email: duplicateEmail,
+                    password: 'newpassword'
+                })
+                .expect(302);
+            expect(loginRes.header.location).to.equal('/');
         });
 
         it('GET /auth/logout should logout the user and redirect to /', async () => {
@@ -548,5 +695,4 @@ describe('Integration Tests', () => {
             expect(res.text).to.include('Organiser Dashboard');
         });
     });
-
 });

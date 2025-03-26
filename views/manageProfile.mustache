@@ -1,0 +1,19 @@
+<!-- views/manageProfile.mustache -->
+<div class="page-content">
+    <h2 class="mb-4">Manage Profile</h2>
+    <form action="/manageProfile" method="POST">
+        <div class="mb-3">
+            <label for="userEmail" class="form-label">Email</label>
+            <input type="email" class="form-control" id="userEmail" name="userEmail" value="{{user.email}}" readonly>
+        </div>
+        <div class="mb-3">
+            <label for="userName" class="form-label">Name</label>
+            <input type="text" class="form-control" id="userName" name="userName" value="{{user.name}}" required>
+        </div>
+        <div class="mb-3">
+            <label for="userMobile" class="form-label">Mobile</label>
+            <input type="text" class="form-control" id="userMobile" name="userMobile" value="{{user.mobile}}" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Update Profile</button>
+    </form>
+</div>

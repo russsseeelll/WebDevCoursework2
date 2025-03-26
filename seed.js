@@ -2,6 +2,39 @@ const userModel = require('./models/user');
 const classModel = require('./models/class');
 const courseModel = require('./models/course');
 
+// Helper to compute the end date for a course.
+// Given a startDate (ISO string), duration (in weeks), and an array of scheduled days,
+// it returns the last available date (as an ISO date string, "YYYY-MM-DD") within that time frame.
+function computeCourseEndDate(startDate, duration, schedule) {
+    const start = new Date(startDate);
+    const end = new Date(start);
+    end.setDate(start.getDate() + duration * 7);
+    const weekdayMap = {
+        "Sunday": 0,
+        "Monday": 1,
+        "Tuesday": 2,
+        "Wednesday": 3,
+        "Thursday": 4,
+        "Friday": 5,
+        "Saturday": 6
+    };
+    const scheduledDays = schedule.map(day => weekdayMap[day]).filter(n => n !== undefined);
+    let lastAvailable = null;
+    for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+        if (scheduledDays.includes(d.getDay())) {
+            lastAvailable = new Date(d);
+        }
+    }
+    if (!lastAvailable) return "";
+    // Format as "YYYY-MM-DD"
+    const yyyy = lastAvailable.getFullYear();
+    let mm = (lastAvailable.getMonth() + 1).toString();
+    let dd = lastAvailable.getDate().toString();
+    if (mm.length < 2) mm = '0' + mm;
+    if (dd.length < 2) dd = '0' + dd;
+    return `${yyyy}-${mm}-${dd}`;
+}
+
 function seedUser() {
     return new Promise((resolve, reject) => {
         userModel.db.findOne({ email: 'dummy@dummy.com' }, (err, user) => {
@@ -121,6 +154,12 @@ function seedCourses() {
                     participants: []
                 }
             ];
+
+            // Compute endDate for each course using computeCourseEndDate.
+            courses.forEach(course => {
+                course.endDate = computeCourseEndDate(course.startDate, course.duration, course.schedule);
+            });
+
             courseModel.db.insert(courses, (err, newCourses) => {
                 if (err) return reject(err);
                 resolve(newCourses);

@@ -62,15 +62,18 @@ const passport = require('./config/passport');
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Import and use routes.
 const indexRoutes = require('./routes/index');
 app.use('/', indexRoutes);
+const bookingRoutes = require('./routes/booking');
+app.use('/', bookingRoutes);
+const manageRoutes = require('./routes/manage');
+app.use('/', manageRoutes);
 
 // Mount authentication routes under /auth.
 const authRoutes = require('./routes/auth');
 app.use('/auth', authRoutes);
 
-// Other routes (API endpoints) remain unchanged.
+// Other routes.
 const dashboardRoutes = require('./routes/dashboard');
 app.use('/dashboard', dashboardRoutes);
 const coursesRoutes = require('./routes/courses');
@@ -79,6 +82,7 @@ const classesRoutes = require('./routes/classes');
 app.use('/api/classes', classesRoutes);
 const usersRoutes = require('./routes/users');
 app.use('/api/users', usersRoutes);
+
 
 const PORT = process.env.PORT || 3000;
 if (require.main === module) {
