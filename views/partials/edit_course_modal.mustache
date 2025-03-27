@@ -1,0 +1,94 @@
+<div class="modal fade" id="editCourseModal-{{_id}}" tabindex="-1" aria-labelledby="editCourseModalLabel-{{_id}}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="/courses/edit" method="POST" novalidate>
+                <input type="hidden" name="courseId" value="{{_id}}">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editCourseModalLabel-{{_id}}">Edit Course - {{name}}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="courseName-{{_id}}" class="form-label">Course Name</label>
+                        <input type="text" class="form-control" id="courseName-{{_id}}" name="courseName" value="{{name}}" placeholder="Enter course name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="courseDescription-{{_id}}" class="form-label">Description</label>
+                        <textarea class="form-control" id="courseDescription-{{_id}}" name="courseDescription" placeholder="Enter course description" required>{{description}}</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="courseStartDate-{{_id}}" class="form-label">Start Date</label>
+                        <input type="date" class="form-control" id="courseStartDate-{{_id}}" name="courseStartDate" value="{{startDate}}" required>
+                        <small class="form-text text-muted">Start date must fall on one of the scheduled days.</small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="courseDuration-{{_id}}" class="form-label">Duration (Weeks)</label>
+                        <select class="form-select" id="courseDuration-{{_id}}" name="courseDuration" required>
+                            <option value="">Select duration</option>
+                            <option value="4" {{#durationIs4}}selected{{/durationIs4}}>4 weeks</option>
+                            <option value="6" {{#durationIs6}}selected{{/durationIs6}}>6 weeks</option>
+                            <option value="8" {{#durationIs8}}selected{{/durationIs8}}>8 weeks</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Schedule (Days)</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="Monday" id="dayMonday-{{_id}}" name="courseSchedule" {{#isMonday}}checked{{/isMonday}}>
+                            <label class="form-check-label" for="dayMonday-{{_id}}">Monday</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="Tuesday" id="dayTuesday-{{_id}}" name="courseSchedule" {{#isTuesday}}checked{{/isTuesday}}>
+                            <label class="form-check-label" for="dayTuesday-{{_id}}">Tuesday</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="Wednesday" id="dayWednesday-{{_id}}" name="courseSchedule" {{#isWednesday}}checked{{/isWednesday}}>
+                            <label class="form-check-label" for="dayWednesday-{{_id}}">Wednesday</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="Thursday" id="dayThursday-{{_id}}" name="courseSchedule" {{#isThursday}}checked{{/isThursday}}>
+                            <label class="form-check-label" for="dayThursday-{{_id}}">Thursday</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="Friday" id="dayFriday-{{_id}}" name="courseSchedule" {{#isFriday}}checked{{/isFriday}}>
+                            <label class="form-check-label" for="dayFriday-{{_id}}">Friday</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="Saturday" id="daySaturday-{{_id}}" name="courseSchedule" {{#isSaturday}}checked{{/isSaturday}}>
+                            <label class="form-check-label" for="daySaturday-{{_id}}">Saturday</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="Sunday" id="daySunday-{{_id}}" name="courseSchedule" {{#isSunday}}checked{{/isSunday}}>
+                            <label class="form-check-label" for="daySunday-{{_id}}">Sunday</label>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="coursePrice-{{_id}}" class="form-label">Price</label>
+                        <div class="input-group">
+                            <span class="input-group-text">£</span>
+                            <input type="number" class="form-control" id="coursePrice-{{_id}}" name="coursePrice" value="{{price}}" placeholder="Amount" min="0" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="courseLocation-{{_id}}" class="form-label">Location</label>
+                        <input type="text" class="form-control" id="courseLocation-{{_id}}" name="courseLocation" value="{{location}}" placeholder="Enter location" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Course Time</label>
+                        <div class="row">
+                            <div class="col">
+                                <input type="time" class="form-control" id="courseStartTime-{{_id}}" name="courseStartTime" value="{{startTime}}" placeholder="Start Time" required>
+                            </div>
+                            <div class="col">
+                                <input type="time" class="form-control" id="courseEndTime-{{_id}}" name="courseEndTime" value="{{endTime}}" placeholder="End Time" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-warning">Update Course</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

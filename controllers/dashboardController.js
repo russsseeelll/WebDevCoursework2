@@ -13,7 +13,7 @@ exports.getDashboard = (req, res) => {
             if (err) classes = [];
             userModel.getUsers({}, (err, users) => {
                 if (err) users = [];
-                res.renderWithLayout('dashboard', {
+                res.renderWithLayout('./admin/dashboard', {
                     title: 'Organiser Dashboard',
                     active: { dashboard: true },
                     year: new Date().getFullYear(),

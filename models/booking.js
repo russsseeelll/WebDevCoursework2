@@ -20,5 +20,9 @@ module.exports = {
     },
     findOne: (query, callback) => {
         db.findOne(query, callback);
+    },
+
+    updateBookingsByUserId: (userId, update, callback) => {
+        db.update({ userId: userId }, { $set: update }, { multi: true }, callback);
     }
 };

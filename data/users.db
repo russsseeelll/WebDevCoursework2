@@ -1,31 +1,22 @@
-{"name":"Non-Organiser User","email":"testnonorg1743019976491@example.com","password":"password123","role":"user","isregistered":true,"_id":"1mQ1oXYzO44DlCTZ"}
+{"name":"Organiser User","email":"testorg1743020235126@example.com","role":"organiser","password":"password123","_id":"4ppqtAj1Cw31c7el"}
+{"name":"Non-Organiser User","email":"testnonorg1743020235123@example.com","password":"password123","role":"user","isregistered":true,"_id":"5APGBF3I8ouIiiv4"}
 {"name":"Login Test User","email":"loginuser@example.com","role":"user","password":"password123","_id":"5FFPShCegLKj4xk3"}
-{"name":"Duplicate User Updated","email":"duplicate1743019976481@example.com","mobile":"0000000000","role":"user","isregistered":true,"_id":"5VjywPrWQr5qQprp","password":"newpassword"}
+{"name":"Test Reg User","email":"testreg1743020235113@example.com","password":"password123","role":"user","isregistered":true,"_id":"7VXr69gBJlyavThL"}
 {"name":"Unregistered User","email":"unreg1743019976434@example.com","mobile":"0000000000","role":"user","isregistered":false,"_id":"7wLxdioyHLGiT7fL"}
+{"name":"Duplicate User Updated","email":"duplicate1743020235114@example.com","mobile":"0000000000","role":"user","isregistered":true,"_id":"8QqPHZZqhlrXttEN","password":"newpassword"}
 {"name":"Test Reg User","email":"testreg1743019827313@example.com","password":"password123","role":"user","isregistered":true,"_id":"9HFLE4Rhxu7AtIRr"}
 {"name":"Non-Organiser User","email":"testnonorg1743019827319@example.com","password":"password123","role":"user","isregistered":true,"_id":"Buk3CMM8eU82jHb4"}
 {"name":"Dummy Admin","email":"dummy@dummy.com","role":"organiser","password":"password","_id":"Dm4FGWwsVoAvrOy1"}
 {"name":"Test Logout User","email":"testlogout1743019976485@example.com","password":"password123","role":"user","isregistered":true,"_id":"ElEcdZ088XdgA32d"}
 {"name":"Test Reg User","email":"testreg1743019976479@example.com","password":"password123","role":"user","isregistered":true,"_id":"EtewNex1Zat8ROwz"}
-{"role":"user","isregistered":false,"_id":"HVUjMYEGz4Gxsq3O"}
-{"role":"user","isregistered":false,"_id":"MRXKg3tRNi8F2j7D"}
+{"name":"Unregistered User","email":"unreg1743020235029@example.com","mobile":"0000000000","role":"user","isregistered":false,"_id":"FNqSts9mrroNKPhw"}
 {"name":"Organiser User","email":"testorg1743019976494@example.com","role":"organiser","password":"password123","_id":"QnaxYjn76dqxdoOJ"}
+{"name":"Reg User","email":"reg1743020235037@example.com","password":"password123","role":"user","isregistered":true,"_id":"SDj0na15M9V7j3VW"}
 {"name":"Test Logout User","email":"testlogout1743019827314@example.com","password":"password123","role":"user","isregistered":true,"_id":"VAwAKv7Hc0zYR5Im"}
+{"name":"Login Test User","email":"loginuser@example.com","role":"user","password":"password123","_id":"c5EKqOkwezL9RmTb"}
 {"name":"Login Test User","email":"loginuser@example.com","role":"user","password":"password123","_id":"h2EixZBLBtWsf8b7"}
+{"name":"Russell McInnes","email":"russellmci@hotmail.co.uk","password":"3c690933a02c22f7a20bb305a27eacbe4b19d6b8ff1538d604bab89f97ac413f","role":"organiser","isregistered":true,"_id":"jcROYV8S9Ztiio2R","mobile":"07572380662"}
+{"name":"Reg Class User","email":"reg1743020235074@example.com","password":"password123","role":"user","isregistered":true,"_id":"m66ApPwDVLyxcifJ"}
 {"name":"Unregistered Class User","email":"unreg1743019976438@example.com","mobile":"0000000000","role":"user","isregistered":false,"_id":"rKZ9GMnOIUiCS4kx"}
 {"name":"Organiser User","email":"testorg1743019827323@example.com","role":"organiser","password":"password123","_id":"rNLTfXg0WYJb6Fdu"}
-{"name":"russsseeelll","email":"russellmci@hotmail.co.uk","password":"6b0a1030928b2fd8742b30a7a1c4ea95659c308b9cb794edaaa6e50ddb5e4ff5","role":"user","isregistered":true,"_id":"uDOOV79q88ns11Wu","mobile":"07572380664"}
-{"name":"Unregistered User","email":"unreg1743020235029@example.com","mobile":"0000000000","role":"user","isregistered":false,"_id":"FNqSts9mrroNKPhw"}
-{"name":"Unregistered Class User","email":"unreg1743020235034@example.com","mobile":"0000000000","role":"user","isregistered":false,"_id":"xKJqtoARoL5l634w"}
-{"name":"Reg User","email":"reg1743020235037@example.com","password":"password123","role":"user","isregistered":true,"_id":"SDj0na15M9V7j3VW"}
-{"name":"Reg Class User","email":"reg1743020235074@example.com","password":"password123","role":"user","isregistered":true,"_id":"m66ApPwDVLyxcifJ"}
-{"name":"Test User","email":"testuser@example.com","role":"user","password":"password123","_id":"pnLnFieWjXCSqTnm"}
-{"name":"Updated Test User","email":"testuser@example.com","role":"organiser","password":"password123","_id":"pnLnFieWjXCSqTnm"}
-{"$$deleted":true,"_id":"pnLnFieWjXCSqTnm"}
-{"name":"Login Test User","email":"loginuser@example.com","role":"user","password":"password123","_id":"c5EKqOkwezL9RmTb"}
-{"name":"Test Reg User","email":"testreg1743020235113@example.com","password":"password123","role":"user","isregistered":true,"_id":"7VXr69gBJlyavThL"}
-{"name":"Duplicate User","email":"duplicate1743020235114@example.com","mobile":"0000000000","role":"user","isregistered":false,"_id":"8QqPHZZqhlrXttEN"}
-{"name":"Duplicate User Updated","email":"duplicate1743020235114@example.com","mobile":"0000000000","role":"user","isregistered":true,"_id":"8QqPHZZqhlrXttEN","password":"newpassword"}
-{"name":"Test Logout User","email":"testlogout1743020235118@example.com","password":"password123","role":"user","isregistered":true,"_id":"wdWFferkQk7eaz36"}
-{"name":"Non-Organiser User","email":"testnonorg1743020235123@example.com","password":"password123","role":"user","isregistered":true,"_id":"5APGBF3I8ouIiiv4"}
-{"name":"Organiser User","email":"testorg1743020235126@example.com","role":"organiser","password":"password123","_id":"4ppqtAj1Cw31c7el"}
+{"name":"Russell McInnes","email":"russellmci@hotmail.co.uk","password":"3c690933a02c22f7a20bb305a27eacbe4b19d6b8ff1538d604bab89f97ac413f","role":"organiser","isregistered":true,"_id":"jcROYV8S9Ztiio2R","mobile":"07572380662"}

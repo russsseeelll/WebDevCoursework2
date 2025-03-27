@@ -77,11 +77,11 @@ app.use('/auth', authRoutes);
 const dashboardRoutes = require('./routes/dashboard');
 app.use('/dashboard', dashboardRoutes);
 const coursesRoutes = require('./routes/courses');
-app.use('/api/courses', coursesRoutes);
+app.use('/courses', coursesRoutes);
 const classesRoutes = require('./routes/classes');
-app.use('/api/classes', classesRoutes);
+app.use('/classes', classesRoutes);
 const usersRoutes = require('./routes/users');
-app.use('/api/users', usersRoutes);
+app.use('/users', usersRoutes);
 
 
 const PORT = process.env.PORT || 3000;

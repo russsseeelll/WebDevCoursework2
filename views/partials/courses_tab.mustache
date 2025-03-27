@@ -1,0 +1,36 @@
+<div class="tab-pane fade" id="coursesTab" role="tabpanel" aria-labelledby="courses-tab">
+    <div class="mb-3 text-end">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCourseModal">Add New Course</button>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Course Name</th>
+                <th>Duration</th>
+                <th>Schedule</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#courses}}
+                <tr>
+                    <td>{{name}}</td>
+                    <td>{{duration}}</td>
+                    <td>{{schedule}}</td>
+                    <td>{{price}}</td>
+                    <td>
+                        <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editCourseModal-{{_id}}">Edit</button>
+                        <form action="/courses/delete" method="POST" style="display:inline;">
+                            <input type="hidden" name="courseId" value="{{_id}}">
+                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                        <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#participantsModal-{{_id}}">Participants</button>
+                    </td>
+                </tr>
+            {{/courses}}
+            </tbody>
+        </table>
+    </div>
+</div>

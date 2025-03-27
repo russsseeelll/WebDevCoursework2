@@ -1,0 +1,24 @@
+<div class="page-content">
+    <h2 class="mb-4 text-center">Organiser (Admin)</h2>
+
+    <ul class="nav nav-tabs" id="dashboardTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="courses-tab" data-bs-toggle="tab" data-bs-target="#coursesTab" type="button" role="tab" aria-controls="coursesTab" aria-selected="false">Courses</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="classes-tab" data-bs-toggle="tab" data-bs-target="#classesTab" type="button" role="tab" aria-controls="classesTab" aria-selected="false">Classes</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="users-tab" data-bs-toggle="tab" data-bs-target="#usersTab" type="button" role="tab" aria-controls="usersTab" aria-selected="false">Users</button>
+        </li>
+    </ul>
+
+    <div class="tab-content mt-3" id="dashboardTabsContent">
+        {{> courses_tab}}
+        {{> classes_tab}}
+        {{> users_tab}}
+    </div>
+</div>
+
+{{> modals}}
+

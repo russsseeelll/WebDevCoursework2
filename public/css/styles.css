@@ -147,6 +147,97 @@ body {
     background-color: #ff4081 !important;
     color: #fff !important;
 }
+/* Button Enhancements and Bootstrap Overrides */
+.btn,
+.btn:hover,
+.btn:focus,
+.btn:active,
+.btn-primary,
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-outline-primary,
+.btn-outline-primary:hover,
+.btn-outline-primary:focus,
+.btn-outline-primary:active {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Primary Button */
+.btn-primary {
+    background-color: #ff4081;
+    border-color: #ff4081;
+    color: #fff;
+    font-weight: bold;
+}
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+    background-color: #e63970; /* slightly darker shade */
+    border-color: #e63970;
+    color: #fff;
+}
+
+/* Secondary Button */
+.btn-secondary {
+    background-color: #fff;
+    border: 2px solid #ff4081;
+    color: #ff4081;
+    font-weight: bold;
+}
+.btn-secondary:hover,
+.btn-secondary:focus,
+.btn-secondary:active {
+    background-color: #ff4081;
+    border-color: #ff4081;
+    color: #fff;
+}
+
+/* Warning Button */
+.btn-warning {
+    background-color: #ff4081;
+    border-color: #ff4081;
+    color: #fff;
+    font-weight: bold;
+}
+.btn-warning:hover,
+.btn-warning:focus,
+.btn-warning:active {
+    background-color: #e63970;
+    border-color: #e63970;
+    color: #fff;
+}
+
+/* Info Button */
+.btn-info {
+    background-color: #ff4081;
+    border-color: #ff4081;
+    color: #fff;
+    font-weight: bold;
+}
+.btn-info:hover,
+.btn-info:focus,
+.btn-info:active {
+    background-color: #e63970;
+    border-color: #e63970;
+    color: #fff;
+}
+
+/* Danger Button */
+.btn-danger {
+    background-color: #ff4081;
+    border-color: #ff4081;
+    color: #fff;
+    font-weight: bold;
+}
+.btn-danger:hover,
+.btn-danger:focus,
+.btn-danger:active {
+    background-color: #e63970;
+    border-color: #e63970;
+    color: #fff;
+}
 
 /* Footer */
 footer {

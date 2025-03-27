@@ -24,7 +24,7 @@ exports.getCoursesPage = (req, res) => {
             req.flash('error', 'Error loading courses: ' + err.message);
             courses = [];
         }
-        res.renderWithLayout('courses', {
+        res.renderWithLayout('./bookings/courses', {
             title: 'Full Courses',
             active: { courses: true },
             courses: courses,
@@ -39,7 +39,7 @@ exports.getClassesPage = (req, res) => {
             req.flash('error', 'Error loading classes: ' + err.message);
             classes = [];
         }
-        res.renderWithLayout('classes', {
+        res.renderWithLayout('./bookings/classes', {
             title: 'Individual Classes',
             active: { classes: true },
             classes: classes,

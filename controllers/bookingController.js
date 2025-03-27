@@ -22,7 +22,7 @@ exports.getBookCourse = (req, res) => {
             req.flash('error', 'Course not found.');
             return res.redirect('/courses');
         }
-        res.renderWithLayout('bookCourse', {
+        res.renderWithLayout('./bookings/bookCourse', {
             title: 'Book Full Course',
             active: { courses: true },
             year: new Date().getFullYear(),
@@ -45,7 +45,7 @@ exports.getBookClass = (req, res) => {
             req.flash('error', 'Class not found.');
             return res.redirect('/classes');
         }
-        res.renderWithLayout('bookClass', {
+        res.renderWithLayout('./bookings/bookClass', {
             title: 'Book Class',
             active: { classes: true },
             year: new Date().getFullYear(),
@@ -253,7 +253,7 @@ exports.getManageBookings = async (req, res) => {
             bookings = [];
         }
         if (!bookings || bookings.length === 0) {
-            return res.renderWithLayout('manageBookings', {
+            return res.renderWithLayout('./manage/manageBookings', {
                 title: 'My Bookings',
                 active: { bookings: true },
                 year: new Date().getFullYear(),
@@ -334,7 +334,7 @@ exports.getManageBookings = async (req, res) => {
                 _id: b._id
             });
         }
-        res.renderWithLayout('manageBookings', {
+        res.renderWithLayout('./manage/manageBookings', {
             title: 'My Bookings',
             active: { bookings: true },
             year: new Date().getFullYear(),
