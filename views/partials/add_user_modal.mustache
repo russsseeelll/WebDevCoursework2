@@ -1,0 +1,41 @@
+<div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="/users/add" method="POST" novalidate>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addUserModalLabel">Add New User</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="userName" class="form-label">User Name</label>
+                        <input type="text" class="form-control" id="userName" name="userName" placeholder="Enter user name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="userEmail" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="userEmail" name="userEmail" placeholder="Enter email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="userPassword" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="userPassword" name="userPassword" placeholder="Enter password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="userRole" class="form-label">Role</label>
+                        <select class="form-select" id="userRole" name="userRole" required>
+                            <option value="user">User</option>
+                            <option value="organiser">Organiser</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="userMobile" class="form-label">Mobile</label>
+                        <input type="text" class="form-control" id="userMobile" name="userMobile" placeholder="Enter mobile number" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save User</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

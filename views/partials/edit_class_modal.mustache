@@ -1,0 +1,46 @@
+<div class="modal fade" id="editClassModal-{{_id}}" tabindex="-1" aria-labelledby="editClassModalLabel-{{_id}}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="/classes/edit" method="POST" novalidate>
+                <input type="hidden" name="classId" value="{{_id}}">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editClassModalLabel-{{_id}}">Edit Class - {{name}}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="className-{{_id}}" class="form-label">Class Name</label>
+                        <input type="text" class="form-control" id="className-{{_id}}" name="className" value="{{name}}" placeholder="Enter class name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="classDescription-{{_id}}" class="form-label">Description</label>
+                        <textarea class="form-control" id="classDescription-{{_id}}" name="classDescription" placeholder="Enter class description" required>{{description}}</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="classLocation-{{_id}}" class="form-label">Location</label>
+                        <input type="text" class="form-control" id="classLocation-{{_id}}" name="classLocation" value="{{location}}" placeholder="Enter location" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="classPrice-{{_id}}" class="form-label">Price</label>
+                        <div class="input-group">
+                            <span class="input-group-text">£</span>
+                            <input type="number" class="form-control" id="classPrice-{{_id}}" name="classPrice" value="{{price}}" placeholder="Amount" min="0" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Existing Timeslots:</label>
+                        <div id="existingTimeslots-{{_id}}" class="d-flex flex-wrap gap-2">
+                            {{#timeslots}}
+                                <span class="badge bg-info text-dark timeslot-badge" data-timeslot="{{.}}">{{.}}</span>
+                            {{/timeslots}}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-warning">Update Class</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

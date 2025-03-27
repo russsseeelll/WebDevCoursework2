@@ -1,0 +1,43 @@
+<div class="modal fade" id="timeslotManagementModal" tabindex="-1" aria-labelledby="timeslotManagementModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="/classes/timeslots/update" method="POST" novalidate>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="timeslotManagementModalLabel">Timeslot Management for <span id="tmClassName"></span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="tmClassId" name="classId" value="">
+                    <div class="mb-3">
+                        <label class="form-label">Existing Timeslots:</label>
+                        <div id="tmTimeslotList" class="d-flex flex-wrap gap-2">
+                        </div>
+                    </div>
+                    <hr>
+                    <h6>Add New Timeslot</h6>
+                    <div class="mb-3">
+                        <label for="tmDate" class="form-label">Date</label>
+                        <input type="date" class="form-control" id="tmDate" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Time Range</label>
+                        <div class="row">
+                            <div class="col">
+                                <input type="time" class="form-control" id="tmStartTime" required>
+                            </div>
+                            <div class="col">
+                                <input type="time" class="form-control" id="tmEndTime" required>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-outline-primary mb-3" id="tmAddBtn">Add Timeslot</button>
+                    <input type="hidden" id="tmTimeslotsCSV" name="timeslotsCSV" value="">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save Timeslots</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

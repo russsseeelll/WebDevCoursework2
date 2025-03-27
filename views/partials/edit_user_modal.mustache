@@ -1,0 +1,42 @@
+<div class="modal fade" id="editUserModal-{{_id}}" tabindex="-1" aria-labelledby="editUserModalLabel-{{_id}}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="/users/edit" method="POST" novalidate>
+                <input type="hidden" name="userId" value="{{_id}}">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editUserModalLabel-{{_id}}">Edit User - {{name}}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="userName-{{_id}}" class="form-label">User Name</label>
+                        <input type="text" class="form-control" id="userName-{{_id}}" name="userName" value="{{name}}" placeholder="Enter user name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="userEmail-{{_id}}" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="userEmail-{{_id}}" name="userEmail" value="{{email}}" placeholder="Enter email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="userRole-{{_id}}" class="form-label">Role</label>
+                        <select class="form-select" id="userRole-{{_id}}" name="userRole" required>
+                            <option value="organiser" {{#isOrganiser}}selected{{/isOrganiser}}>Organiser</option>
+                            <option value="user" {{^isOrganiser}}selected{{/isOrganiser}}>User</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="userPassword-{{_id}}" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="userPassword-{{_id}}" name="userPassword" placeholder="Enter new password (optional)">
+                    </div>
+                    <div class="mb-3">
+                        <label for="userMobile-{{_id}}" class="form-label">Mobile</label>
+                        <input type="text" class="form-control" id="userMobile-{{_id}}" name="userMobile" value="{{mobile}}" placeholder="Enter mobile number" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-warning">Update User</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

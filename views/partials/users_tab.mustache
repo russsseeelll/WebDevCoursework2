@@ -1,0 +1,33 @@
+<div class="tab-pane fade" id="usersTab" role="tabpanel" aria-labelledby="users-tab">
+    <div class="mb-3 text-end">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">Add New User</button>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>User Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#users}}
+                <tr>
+                    <td>{{name}}</td>
+                    <td>{{email}}</td>
+                    <td>{{role}}</td>
+                    <td>
+                        <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editUserModal-{{_id}}">Edit</button>
+                        <form action="/users/delete" method="POST" style="display:inline;">
+                            <input type="hidden" name="userId" value="{{_id}}">
+                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            {{/users}}
+            </tbody>
+        </table>
+    </div>
+</div>
