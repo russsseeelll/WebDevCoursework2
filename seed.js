@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 const Datastore = require('nedb');
 
 const userModel = require('./models/user');
@@ -40,7 +41,7 @@ function computeCourseEndDate(startDate, duration, schedule) {
 
 function seedUser() {
     return new Promise((resolve, reject) => {
-        // Use userModel.db which is exported in the user model.
+        // Use the exported db from userModel.
         userModel.db.findOne({ email: 'alexandra.smith@danceacademy.com' }, (err, user) => {
             if (err) return reject(err);
             if (user) return resolve(user);
@@ -60,10 +61,18 @@ function seedUser() {
 
 function seedClasses() {
     return new Promise((resolve, reject) => {
-        // Create a new Datastore instance for classes using the same file as in your models.
+        // Create a new Datastore instance for classes using the same file as your model.
         const classDb = new Datastore({
             filename: path.join(__dirname, 'data', 'classes.db'),
-            autoload: true
+            autoload: true,
+            onload: function(err) {
+                if (err && err.code !== 'ENOENT') {
+                    console.error('Error loading classes DB:', err);
+                    return reject(err);
+                } else if (err && err.code === 'ENOENT') {
+                    console.warn('Warning: classes.db~ not found. Ignoring ENOENT error.');
+                }
+            }
         });
         // Remove all existing classes.
         classDb.remove({}, { multi: true }, (err) => {
@@ -124,10 +133,18 @@ function seedClasses() {
 
 function seedCourses() {
     return new Promise((resolve, reject) => {
-        // Create a new Datastore instance for courses.
+        // Create a new Datastore instance for courses using the same file as your model.
         const courseDb = new Datastore({
             filename: path.join(__dirname, 'data', 'courses.db'),
-            autoload: true
+            autoload: true,
+            onload: function(err) {
+                if (err && err.code !== 'ENOENT') {
+                    console.error('Error loading courses DB:', err);
+                    return reject(err);
+                } else if (err && err.code === 'ENOENT') {
+                    console.warn('Warning: courses.db~ not found. Ignoring ENOENT error.');
+                }
+            }
         });
         // Remove all existing courses.
         courseDb.remove({}, { multi: true }, (err) => {
