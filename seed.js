@@ -1,3 +1,6 @@
+const path = require('path');
+const Datastore = require('nedb');
+
 const userModel = require('./models/user');
 const classModel = require('./models/class');
 const courseModel = require('./models/course');
@@ -37,7 +40,8 @@ function computeCourseEndDate(startDate, duration, schedule) {
 
 function seedUser() {
     return new Promise((resolve, reject) => {
-        userModel.findOne({ email: 'alexandra.smith@danceacademy.com' }, (err, user) => {
+        // Use userModel.db which is exported in the user model.
+        userModel.db.findOne({ email: 'alexandra.smith@danceacademy.com' }, (err, user) => {
             if (err) return reject(err);
             if (user) return resolve(user);
             const adminUser = {
@@ -56,8 +60,13 @@ function seedUser() {
 
 function seedClasses() {
     return new Promise((resolve, reject) => {
-        // Replace db.remove with deleteMany
-        classModel.deleteMany({}, (err) => {
+        // Create a new Datastore instance for classes using the same file as in your models.
+        const classDb = new Datastore({
+            filename: path.join(__dirname, 'data', 'classes.db'),
+            autoload: true
+        });
+        // Remove all existing classes.
+        classDb.remove({}, { multi: true }, (err) => {
             if (err) return reject(err);
             const classes = [
                 {
@@ -105,7 +114,7 @@ function seedClasses() {
                     participants: []
                 }
             ];
-            classModel.insertMany(classes, (err, newClasses) => {
+            classDb.insert(classes, (err, newClasses) => {
                 if (err) return reject(err);
                 resolve(newClasses);
             });
@@ -115,8 +124,13 @@ function seedClasses() {
 
 function seedCourses() {
     return new Promise((resolve, reject) => {
-        // Replace db.remove with deleteMany
-        courseModel.deleteMany({}, (err) => {
+        // Create a new Datastore instance for courses.
+        const courseDb = new Datastore({
+            filename: path.join(__dirname, 'data', 'courses.db'),
+            autoload: true
+        });
+        // Remove all existing courses.
+        courseDb.remove({}, { multi: true }, (err) => {
             if (err) return reject(err);
             const courses = [
                 {
@@ -174,7 +188,7 @@ function seedCourses() {
                 course.endDate = computeCourseEndDate(course.startDate, course.duration, course.schedule);
             });
 
-            courseModel.insertMany(courses, (err, newCourses) => {
+            courseDb.insert(courses, (err, newCourses) => {
                 if (err) return reject(err);
                 resolve(newCourses);
             });
