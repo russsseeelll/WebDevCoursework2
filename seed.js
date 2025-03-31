@@ -37,7 +37,7 @@ function computeCourseEndDate(startDate, duration, schedule) {
 
 function seedUser() {
     return new Promise((resolve, reject) => {
-        userModel.db.findOne({ email: 'alexandra.smith@danceacademy.com' }, (err, user) => {
+        userModel.findOne({ email: 'alexandra.smith@danceacademy.com' }, (err, user) => {
             if (err) return reject(err);
             if (user) return resolve(user);
             const adminUser = {
@@ -56,7 +56,8 @@ function seedUser() {
 
 function seedClasses() {
     return new Promise((resolve, reject) => {
-        classModel.db.remove({}, { multi: true }, (err) => {
+        // Replace db.remove with deleteMany
+        classModel.deleteMany({}, (err) => {
             if (err) return reject(err);
             const classes = [
                 {
@@ -104,7 +105,7 @@ function seedClasses() {
                     participants: []
                 }
             ];
-            classModel.db.insert(classes, (err, newClasses) => {
+            classModel.insertMany(classes, (err, newClasses) => {
                 if (err) return reject(err);
                 resolve(newClasses);
             });
@@ -114,7 +115,8 @@ function seedClasses() {
 
 function seedCourses() {
     return new Promise((resolve, reject) => {
-        courseModel.db.remove({}, { multi: true }, (err) => {
+        // Replace db.remove with deleteMany
+        courseModel.deleteMany({}, (err) => {
             if (err) return reject(err);
             const courses = [
                 {
@@ -167,11 +169,12 @@ function seedCourses() {
                 }
             ];
 
+            // Compute endDate for each course using computeCourseEndDate.
             courses.forEach(course => {
                 course.endDate = computeCourseEndDate(course.startDate, course.duration, course.schedule);
             });
 
-            courseModel.db.insert(courses, (err, newCourses) => {
+            courseModel.insertMany(courses, (err, newCourses) => {
                 if (err) return reject(err);
                 resolve(newCourses);
             });
