@@ -8,12 +8,18 @@ const db = new Datastore({
 });
 
 module.exports = {
-    db,
-    addClass: (classObj, callback) => {
-        db.insert(classObj, callback);
+    addClass: (newClass, callback) => {
+        db.insert(newClass, callback);
     },
     getClasses: (query, callback) => {
         db.find(query, callback);
+    },
+    // New methods for pagination:
+    countClasses: (query, callback) => {
+        db.count(query, callback);
+    },
+    getClassesPaginated: (query, skip, limit, callback) => {
+        db.find(query).skip(skip).limit(limit).exec(callback);
     },
     getClassById: (id, callback) => {
         db.findOne({ _id: id }, callback);

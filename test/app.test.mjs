@@ -49,7 +49,7 @@ describe('Integration Tests', () => {
         before(async () => {
             // Create a course for booking test via API.
             await request(app)
-                .post('/api/courses/add')
+                .post('/courses/add')
                 .type('form')
                 .send({
                     courseName: 'Booking Test Course',
@@ -65,7 +65,7 @@ describe('Integration Tests', () => {
                 .expect(302);
 
             const coursesRes = await request(app)
-                .get('/api/courses')
+                .get('/courses')
                 .set('Accept', 'application/json')
                 .expect(200);
             const courses = coursesRes.body;
@@ -74,7 +74,7 @@ describe('Integration Tests', () => {
 
             // Create a class for booking test via API.
             await request(app)
-                .post('/api/classes/add')
+                .post('/classes/add')
                 .type('form')
                 .send({
                     className: 'Booking Test Class',
@@ -85,7 +85,7 @@ describe('Integration Tests', () => {
                 .expect(302);
 
             const classesRes = await request(app)
-                .get('/api/classes')
+                .get('/classes')
                 .set('Accept', 'application/json')
                 .expect(200);
             const classes = classesRes.body;
@@ -261,22 +261,22 @@ describe('Integration Tests', () => {
     });
 
     // --------------------------------------------------
-    // Test API Courses Endpoints
+    // Test Courses Endpoints
     // --------------------------------------------------
-    describe('API Courses Endpoints', () => {
+    describe('Courses Endpoints', () => {
         let createdCourseId;
 
-        it('GET /api/courses should return an array of courses (JSON)', async () => {
+        it('GET /courses should return an array of courses (JSON)', async () => {
             const res = await request(app)
-                .get('/api/courses')
+                .get('/courses')
                 .set('Accept', 'application/json')
                 .expect(200);
             expect(res.body).to.be.an('array');
         });
 
-        it('POST /api/courses/add should add a new course and redirect to /dashboard', async () => {
+        it('POST /courses/add should add a new course and redirect to /dashboard', async () => {
             const res = await request(app)
-                .post('/api/courses/add')
+                .post('/courses/add')
                 .type('form')
                 .send({
                     courseName: 'Test Course',
@@ -293,9 +293,9 @@ describe('Integration Tests', () => {
             expect(res.header.location).to.equal('/dashboard');
         });
 
-        it('GET /api/courses should contain the newly added course', async () => {
+        it('GET /courses should contain the newly added course', async () => {
             const res = await request(app)
-                .get('/api/courses')
+                .get('/courses')
                 .set('Accept', 'application/json')
                 .expect(200);
             const courses = res.body;
@@ -304,9 +304,9 @@ describe('Integration Tests', () => {
             createdCourseId = testCourse._id;
         });
 
-        it('POST /api/courses/edit should update the course and redirect to /dashboard', async () => {
+        it('POST /courses/edit should update the course and redirect to /dashboard', async () => {
             const res = await request(app)
-                .post('/api/courses/edit')
+                .post('/courses/edit')
                 .type('form')
                 .send({
                     courseId: createdCourseId,
@@ -324,9 +324,9 @@ describe('Integration Tests', () => {
             expect(res.header.location).to.equal('/dashboard');
         });
 
-        it('POST /api/courses/delete should delete the course and redirect to /dashboard', async () => {
+        it('POST /courses/delete should delete the course and redirect to /dashboard', async () => {
             const res = await request(app)
-                .post('/api/courses/delete')
+                .post('/courses/delete')
                 .type('form')
                 .send({ courseId: createdCourseId })
                 .expect(302);
@@ -335,22 +335,22 @@ describe('Integration Tests', () => {
     });
 
     // --------------------------------------------------
-    // Test API Classes Endpoints
+    // Test Classes Endpoints
     // --------------------------------------------------
-    describe('API Classes Endpoints', () => {
+    describe('Classes Endpoints', () => {
         let createdClassId;
 
-        it('GET /api/classes should return an array of classes (JSON)', async () => {
+        it('GET /classes should return an array of classes (JSON)', async () => {
             const res = await request(app)
-                .get('/api/classes')
+                .get('/classes')
                 .set('Accept', 'application/json')
                 .expect(200);
             expect(res.body).to.be.an('array');
         });
 
-        it('POST /api/classes/add should add a new class and redirect to /dashboard', async () => {
+        it('POST /classes/add should add a new class and redirect to /dashboard', async () => {
             const res = await request(app)
-                .post('/api/classes/add')
+                .post('/classes/add')
                 .type('form')
                 .send({
                     className: 'Test Class',
@@ -362,9 +362,9 @@ describe('Integration Tests', () => {
             expect(res.header.location).to.equal('/dashboard');
         });
 
-        it('GET /api/classes should contain the newly added class', async () => {
+        it('GET /classes should contain the newly added class', async () => {
             const res = await request(app)
-                .get('/api/classes')
+                .get('/classes')
                 .set('Accept', 'application/json')
                 .expect(200);
             const classes = res.body;
@@ -373,9 +373,9 @@ describe('Integration Tests', () => {
             createdClassId = testClass._id;
         });
 
-        it('POST /api/classes/edit should update the class and redirect to /dashboard', async () => {
+        it('POST /classes/edit should update the class and redirect to /dashboard', async () => {
             const res = await request(app)
-                .post('/api/classes/edit')
+                .post('/classes/edit')
                 .type('form')
                 .send({
                     classId: createdClassId,
@@ -388,9 +388,9 @@ describe('Integration Tests', () => {
             expect(res.header.location).to.equal('/dashboard');
         });
 
-        it('POST /api/classes/timeslots/update should update timeslots and redirect to /dashboard', async () => {
+        it('POST /classes/timeslots/update should update timeslots and redirect to /dashboard', async () => {
             const res = await request(app)
-                .post('/api/classes/timeslots/update')
+                .post('/classes/timeslots/update')
                 .type('form')
                 .send({
                     classId: createdClassId,
@@ -400,9 +400,9 @@ describe('Integration Tests', () => {
             expect(res.header.location).to.equal('/dashboard');
         });
 
-        it('POST /api/classes/participants/add should add a participant and redirect to /dashboard', async () => {
+        it('POST /classes/participants/add should add a participant and redirect to /dashboard', async () => {
             const res = await request(app)
-                .post('/api/classes/participants/add')
+                .post('/classes/participants/add')
                 .type('form')
                 .send({
                     classId: createdClassId,
@@ -413,9 +413,9 @@ describe('Integration Tests', () => {
             expect(res.header.location).to.equal('/dashboard');
         });
 
-        it('GET /api/classes/participants should return participants for the class', async () => {
+        it('GET /classes/participants should return participants for the class', async () => {
             const res = await request(app)
-                .get('/api/classes/participants')
+                .get('/classes/participants')
                 .query({ classId: createdClassId })
                 .expect(200);
             const participants = res.body;
@@ -424,9 +424,9 @@ describe('Integration Tests', () => {
             expect(participant).to.exist;
         });
 
-        it('POST /api/classes/delete should delete the class and redirect to /dashboard', async () => {
+        it('POST /classes/delete should delete the class and redirect to /dashboard', async () => {
             const res = await request(app)
-                .post('/api/classes/delete')
+                .post('/classes/delete')
                 .type('form')
                 .send({ classId: createdClassId })
                 .expect(302);
@@ -435,22 +435,22 @@ describe('Integration Tests', () => {
     });
 
     // --------------------------------------------------
-    // Test API Users Endpoints
+    // Test Users Endpoints
     // --------------------------------------------------
-    describe('API Users Endpoints', () => {
+    describe('Users Endpoints', () => {
         let createdUserId;
 
-        it('GET /api/users should return an array of users (JSON)', async () => {
+        it('GET /users should return an array of users (JSON)', async () => {
             const res = await request(app)
-                .get('/api/users')
+                .get('/users')
                 .set('Accept', 'application/json')
                 .expect(200);
             expect(res.body).to.be.an('array');
         });
 
-        it('POST /api/users/add should add a new user and redirect to /dashboard', async () => {
+        it('POST /users/add should add a new user and redirect to /dashboard', async () => {
             const res = await request(app)
-                .post('/api/users/add')
+                .post('/users/add')
                 .type('form')
                 .send({
                     userName: 'Test User',
@@ -462,9 +462,9 @@ describe('Integration Tests', () => {
             expect(res.header.location).to.equal('/dashboard');
         });
 
-        it('GET /api/users should contain the newly added user', async () => {
+        it('GET /users should contain the newly added user', async () => {
             const res = await request(app)
-                .get('/api/users')
+                .get('/users')
                 .set('Accept', 'application/json')
                 .expect(200);
             const users = res.body;
@@ -473,9 +473,9 @@ describe('Integration Tests', () => {
             createdUserId = testUser._id;
         });
 
-        it('POST /api/users/edit should update the user and redirect to /dashboard', async () => {
+        it('POST /users/edit should update the user and redirect to /dashboard', async () => {
             const res = await request(app)
-                .post('/api/users/edit')
+                .post('/users/edit')
                 .type('form')
                 .send({
                     userId: createdUserId,
@@ -487,9 +487,9 @@ describe('Integration Tests', () => {
             expect(res.header.location).to.equal('/dashboard');
         });
 
-        it('POST /api/users/delete should delete the user and redirect to /dashboard', async () => {
+        it('POST /users/delete should delete the user and redirect to /dashboard', async () => {
             const res = await request(app)
-                .post('/api/users/delete')
+                .post('/users/delete')
                 .type('form')
                 .send({ userId: createdUserId })
                 .expect(302);
@@ -506,7 +506,7 @@ describe('Integration Tests', () => {
         // Create a user to test login.
         before(async () => {
             await request(app)
-                .post('/api/users/add')
+                .post('/users/add')
                 .type('form')
                 .send({
                     userName: 'Login Test User',
@@ -669,7 +669,7 @@ describe('Integration Tests', () => {
             const uniqueEmail = `testorg${Date.now()}@example.com`;
             // Add an organiser using the API (which allows role specification)
             await request(app)
-                .post('/api/users/add')
+                .post('/users/add')
                 .type('form')
                 .send({
                     userName: 'Organiser User',

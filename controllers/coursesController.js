@@ -3,13 +3,20 @@
  */
 
 const courseModel = require('../models/course');
+const bookingModel = require('../models/booking');
 
 exports.getCourses = (req, res) => {
     courseModel.getCourses({}, (err, courses) => {
-        if (err) return res.status(500).send(err);
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        if (!Array.isArray(courses)) {
+            courses = [];
+        }
         res.json(courses);
     });
 };
+
 
 exports.addCourse = (req, res) => {
     const course = {
@@ -25,6 +32,8 @@ exports.addCourse = (req, res) => {
         participants: []
     };
 
+    course.endDate = getCourseEndDate(course);
+
     courseModel.addCourse(course, (err, newCourse) => {
         if (err) {
             req.flash('error', 'Error adding course: ' + err.message);
@@ -34,6 +43,7 @@ exports.addCourse = (req, res) => {
         res.redirect('/dashboard');
     });
 };
+
 
 exports.editCourse = (req, res) => {
     const courseId = req.body.courseId;
@@ -49,6 +59,8 @@ exports.editCourse = (req, res) => {
         endTime: req.body.courseEndTime
     };
 
+    update.endDate = getCourseEndDate(update);
+
     courseModel.updateCourse(courseId, update, (err) => {
         if (err) {
             req.flash('error', 'Error editing course: ' + err.message);
@@ -59,6 +71,7 @@ exports.editCourse = (req, res) => {
     });
 };
 
+
 exports.deleteCourse = (req, res) => {
     const courseId = req.body.courseId;
     courseModel.deleteCourse(courseId, (err) => {
@@ -66,10 +79,16 @@ exports.deleteCourse = (req, res) => {
             req.flash('error', 'Error deleting course: ' + err.message);
             return res.redirect('/dashboard');
         }
-        req.flash('success', 'Course deleted successfully');
-        res.redirect('/dashboard');
+        bookingModel.deleteBookings({ bookingType: 'course', itemId: courseId }, (err) => {
+            if (err) {
+                console.error('Error deleting bookings for course:', err);
+            }
+            req.flash('success', 'Course deleted successfully.');
+            res.redirect('/dashboard');
+        });
     });
 };
+
 
 exports.getParticipants = (req, res) => {
     const courseId = req.query.courseId;
@@ -104,3 +123,41 @@ exports.addParticipant = (req, res) => {
         });
     });
 };
+
+function getCourseEndDate(course) {
+
+    const duration = parseInt(course.duration, 10);
+    if (isNaN(duration) || duration <= 0 || !course.schedule || !course.schedule.length) {
+        return "";
+    }
+
+    const startDate = course.startDate ? new Date(course.startDate) : new Date();
+    const endDate = new Date(startDate);
+
+    endDate.setDate(startDate.getDate() + duration * 7);
+
+    const weekdayMap = {
+        "Sunday": 0,
+        "Monday": 1,
+        "Tuesday": 2,
+        "Wednesday": 3,
+        "Thursday": 4,
+        "Friday": 5,
+        "Saturday": 6
+    };
+
+    const scheduledDays = course.schedule.map(day => weekdayMap[day]).filter(n => n !== undefined);
+    const availableDates = [];
+
+    for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+        if (scheduledDays.includes(d.getDay())) {
+            availableDates.push(new Date(d));
+        }
+    }
+    if (availableDates.length === 0) return "";
+    const lastDate = availableDates[availableDates.length - 1];
+    const dd = ("0" + lastDate.getDate()).slice(-2);
+    const mm = ("0" + (lastDate.getMonth() + 1)).slice(-2);
+    const yyyy = lastDate.getFullYear();
+    return dd + '/' + mm + '/' + yyyy;
+}

@@ -3,13 +3,20 @@
  */
 
 const classModel = require('../models/class');
+const bookingModel = require('../models/booking');
 
 exports.getClasses = (req, res) => {
     classModel.getClasses({}, (err, classes) => {
-        if (err) return res.status(500).send(err);
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        if (!Array.isArray(classes)) {
+            classes = [];
+        }
         res.json(classes);
     });
 };
+
 
 exports.addClass = (req, res) => {
     const newClass = {
@@ -57,10 +64,16 @@ exports.deleteClass = (req, res) => {
             req.flash('error', 'Error deleting class: ' + err.message);
             return res.redirect('/dashboard');
         }
-        req.flash('success', 'Class deleted successfully');
-        res.redirect('/dashboard');
+        bookingModel.deleteBookings({ bookingType: 'class', itemId: classId }, (err) => {
+            if (err) {
+                console.error('Error deleting bookings for class:', err);
+            }
+            req.flash('success', 'Class deleted successfully.');
+            res.redirect('/dashboard');
+        });
     });
 };
+
 
 exports.updateTimeslots = (req, res) => {
     let timeslots = [];
@@ -82,8 +95,9 @@ exports.updateTimeslots = (req, res) => {
 exports.getParticipants = (req, res) => {
     const classId = req.query.classId;
     classModel.getClassById(classId, (err, classObj) => {
-        if (err || !classObj) return res.status(500).send(err || 'Class not found');
-        res.json(classObj.participants || []);
+        if (err) return res.status(500).json({ error: err.message });
+        if (!classObj) return res.status(404).json([]);
+        res.json(Array.isArray(classObj.participants) ? classObj.participants : []);
     });
 };
 

@@ -17,9 +17,9 @@
             {{#courses}}
                 <tr>
                     <td>{{name}}</td>
-                    <td>{{duration}}</td>
+                    <td>{{duration}} weeks</td>
                     <td>{{schedule}}</td>
-                    <td>{{price}}</td>
+                    <td>£{{price}}</td>
                     <td>
                         <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editCourseModal-{{_id}}">Edit</button>
                         <form action="/courses/delete" method="POST" style="display:inline;">

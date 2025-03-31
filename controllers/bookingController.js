@@ -1,8 +1,11 @@
+// bookingController.js
+
 const courseModel = require('../models/course');
 const classModel = require('../models/class');
 const userModel = require('../models/user');
 const bookingModel = require('../models/booking');
 
+// Middleware to ensure the user is authenticated.
 exports.ensureAuthenticated = (req, res, next) => {
     if (req.session.user) {
         return next();
@@ -11,29 +14,30 @@ exports.ensureAuthenticated = (req, res, next) => {
     res.redirect('/auth/login');
 };
 
+// Render the booking page for a course.
 exports.getBookCourse = (req, res) => {
     const courseId = req.query.course;
     if (!courseId) {
         req.flash('error', 'No course selected for booking.');
         return res.redirect('/courses');
     }
+    // Use the courseId from the query parameters
     courseModel.getCourseById(courseId, (err, course) => {
         if (err || !course) {
             req.flash('error', 'Course not found.');
             return res.redirect('/courses');
         }
+        // Render the booking form with the course details
         res.renderWithLayout('./bookings/bookCourse', {
-            title: 'Book Full Course',
-            active: { courses: true },
-            year: new Date().getFullYear(),
             course: course,
-            availableDates: course.availableDates || [],
-            duration: course.duration || '',
-            user: req.session.user || null
+            user: req.session.user || null,
+            year: new Date().getFullYear()
         });
     });
 };
 
+
+// Render the booking page for a class.
 exports.getBookClass = (req, res) => {
     const classId = req.query.class;
     if (!classId) {
@@ -56,6 +60,7 @@ exports.getBookClass = (req, res) => {
     });
 };
 
+// Helper function to calculate the course end date.
 function getCourseEndDate(course) {
     const duration = parseInt(course.duration, 10);
     if (isNaN(duration) || duration <= 0 || !course.schedule || !course.schedule.length) {
@@ -81,7 +86,6 @@ function getCourseEndDate(course) {
         }
     }
     if (availableDates.length === 0) return "";
-
     const lastDate = availableDates[availableDates.length - 1];
     const dd = ("0" + lastDate.getDate()).slice(-2);
     const mm = ("0" + (lastDate.getMonth() + 1)).slice(-2);
@@ -89,6 +93,7 @@ function getCourseEndDate(course) {
     return dd + '/' + mm + '/' + yyyy;
 }
 
+// Handle course booking requests.
 exports.postBookCourse = (req, res) => {
     const processBooking = (user, userId, createSession = true) => {
         if (createSession) {
@@ -120,8 +125,27 @@ exports.postBookCourse = (req, res) => {
                         req.flash('error', 'Error booking course: ' + err.message);
                         return res.redirect('/courses');
                     }
-                    req.flash('success', 'Course booking request received.');
-                    res.redirect('/courses');
+                    // After inserting the booking, update the course's participants.
+                    courseModel.getCourseById(req.body.courseId, (err, course) => {
+                        if (!err && course) {
+                            course.participants = course.participants || [];
+                            // For courses, store the real name and email
+                            course.participants.push({
+                                name: req.body.contactName,
+                                email: req.body.contactEmail
+                            });
+                            courseModel.updateCourse(req.body.courseId, { participants: course.participants }, (updateErr) => {
+                                if (updateErr) {
+                                    console.error("Error updating course participants:", updateErr);
+                                }
+                                req.flash('success', 'Course booking request received.');
+                                res.redirect('/courses');
+                            });
+                        } else {
+                            req.flash('success', 'Course booking request received. (Could not update participants)');
+                            res.redirect('/courses');
+                        }
+                    });
                 });
             }
         );
@@ -136,14 +160,12 @@ exports.postBookCourse = (req, res) => {
                 return res.redirect('/courses');
             }
             if (existingUser) {
-
                 if (existingUser.isregistered === false) {
                     processBooking(existingUser, existingUser._id, false);
                 } else {
                     processBooking(existingUser, existingUser._id);
                 }
             } else {
-
                 const newUser = {
                     name: req.body.contactName,
                     email: req.body.contactEmail,
@@ -163,6 +185,7 @@ exports.postBookCourse = (req, res) => {
     }
 };
 
+// Handle class booking requests.
 exports.postBookClass = (req, res) => {
     const processBooking = (user, userId, createSession = true) => {
         if (createSession) {
@@ -199,8 +222,28 @@ exports.postBookClass = (req, res) => {
                         req.flash('error', 'Error booking class: ' + err.message);
                         return res.redirect('/classes');
                     }
-                    req.flash('success', 'Class booking request received.');
-                    res.redirect('/classes');
+                    // After inserting the booking, update the class's participants.
+                    classModel.getClassById(req.body.classId, (err, classInfo) => {
+                        if (!err && classInfo) {
+                            classInfo.participants = classInfo.participants || [];
+                            // For classes, store the name, email, and selectedTime
+                            classInfo.participants.push({
+                                name: req.body.contactName,
+                                email: req.body.contactEmail,
+                                selectedTime: req.body.selectedTime
+                            });
+                            classModel.updateClass(req.body.classId, { participants: classInfo.participants }, (updateErr) => {
+                                if (updateErr) {
+                                    console.error("Error updating class participants:", updateErr);
+                                }
+                                req.flash('success', 'Class booking request received.');
+                                res.redirect('/classes');
+                            });
+                        } else {
+                            req.flash('success', 'Class booking request received. (Could not update participants)');
+                            res.redirect('/classes');
+                        }
+                    });
                 });
             }
         );
@@ -240,6 +283,7 @@ exports.postBookClass = (req, res) => {
     }
 };
 
+// Manage bookings: fetch and process all bookings for the current user.
 exports.getManageBookings = async (req, res) => {
     const currentUser = req.user || req.session.user;
     if (!currentUser) {
@@ -306,7 +350,6 @@ exports.getManageBookings = async (req, res) => {
                     location = classInfo.location || '';
                     itemName = classInfo.name || '';
                     if (b.selectedTime) {
-
                         const parts = b.selectedTime.split(' - ');
                         extraInfo = parts.length > 1 ? parts[0] + ' | ' + parts.slice(1).join(' - ') : b.selectedTime;
                     } else {
@@ -349,12 +392,55 @@ exports.cancelBooking = (req, res) => {
         req.flash('error', 'No booking specified.');
         return res.redirect('/manageBookings');
     }
-    bookingModel.deleteBooking(bookingId, (err) => {
-        if (err) {
-            req.flash('error', 'Error cancelling booking: ' + err.message);
-        } else {
-            req.flash('success', 'Booking cancelled successfully.');
+    bookingModel.getBookingById(bookingId, (err, booking) => {
+        if (err || !booking) {
+            req.flash('error', 'Booking not found.');
+            return res.redirect('/manageBookings');
         }
-        res.redirect('/manageBookings');
+        bookingModel.deleteBooking(bookingId, (err) => {
+            if (err) {
+                req.flash('error', 'Error cancelling booking: ' + err.message);
+                return res.redirect('/manageBookings');
+            }
+            // Cascade: remove the participant from the course or class.
+            if (booking.bookingType === 'course') {
+                courseModel.getCourseById(booking.itemId, (err, course) => {
+                    if (!err && course) {
+                        // Filter out the participant based on a unique property (email).
+                        course.participants = (course.participants || []).filter(p => p.email !== booking.contactEmail);
+                        courseModel.updateCourse(booking.itemId, { participants: course.participants }, (updateErr) => {
+                            if (updateErr) {
+                                console.error('Error removing participant from course:', updateErr);
+                            }
+                            req.flash('success', 'Booking cancelled successfully.');
+                            res.redirect('/manageBookings');
+                        });
+                    } else {
+                        req.flash('success', 'Booking cancelled successfully.');
+                        res.redirect('/manageBookings');
+                    }
+                });
+            } else if (booking.bookingType === 'class') {
+                classModel.getClassById(booking.itemId, (err, classInfo) => {
+                    if (!err && classInfo) {
+                        // For classes, also check selectedTime since a user may have multiple bookings.
+                        classInfo.participants = (classInfo.participants || []).filter(p =>
+                            p.email !== booking.contactEmail || p.selectedTime !== booking.selectedTime
+                        );
+                        classModel.updateClass(booking.itemId, { participants: classInfo.participants }, (updateErr) => {
+                            if (updateErr) {
+                                console.error('Error removing participant from class:', updateErr);
+                            }
+                            req.flash('success', 'Booking cancelled successfully.');
+                            res.redirect('/manageBookings');
+                        });
+                    } else {
+                        req.flash('success', 'Booking cancelled successfully.');
+                        res.redirect('/manageBookings');
+                    }
+                });
+            }
+        });
     });
 };
+

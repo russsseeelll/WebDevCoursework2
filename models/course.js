@@ -8,12 +8,17 @@ const db = new Datastore({
 });
 
 module.exports = {
-    db,
     addCourse: (course, callback) => {
         db.insert(course, callback);
     },
     getCourses: (query, callback) => {
         db.find(query, callback);
+    },
+    countCourses: (query, callback) => {
+        db.count(query, callback);
+    },
+    getCoursesPaginated: (query, skip, limit, callback) => {
+        db.find(query).skip(skip).limit(limit).exec(callback);
     },
     getCourseById: (id, callback) => {
         db.findOne({ _id: id }, callback);
