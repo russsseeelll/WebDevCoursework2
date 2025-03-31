@@ -37,16 +37,16 @@ function computeCourseEndDate(startDate, duration, schedule) {
 
 function seedUser() {
     return new Promise((resolve, reject) => {
-        userModel.db.findOne({ email: 'dummy@dummy.com' }, (err, user) => {
+        userModel.db.findOne({ email: 'alexandra.smith@danceacademy.com' }, (err, user) => {
             if (err) return reject(err);
             if (user) return resolve(user);
-            const dummyUser = {
-                name: 'Dummy Admin',
-                email: 'dummy@dummy.com',
+            const adminUser = {
+                name: 'Alexandra Smith',
+                email: 'alexandra.smith@danceacademy.com',
                 role: 'organiser',
-                password: 'password'
+                password: 'securepassword123'
             };
-            userModel.addUser(dummyUser, (err, newUser) => {
+            userModel.addUser(adminUser, (err, newUser) => {
                 if (err) return reject(err);
                 resolve(newUser);
             });
@@ -60,35 +60,47 @@ function seedClasses() {
             if (err) return reject(err);
             const classes = [
                 {
-                    name: "SPIN CLASS",
-                    description: "Biking",
-                    location: "Glasgow office - studio 1",
-                    price: 10,
-                    timeslots: ["25/04/2025 - 09:00 - 10:00", "27/03/2025 - 13:00 - 14:00"],
-                    participants: []
-                },
-                {
-                    name: "YOGA SESSION",
-                    description: "Mind and body balance",
-                    location: "Glasgow office - studio 2",
-                    price: 12,
-                    timeslots: ["26/04/2025 - 10:00 - 11:00", "28/04/2025 - 17:00 - 18:00"],
-                    participants: []
-                },
-                {
-                    name: "HIIT WORKOUT",
-                    description: "High intensity interval training",
-                    location: "Glasgow office - gym",
+                    name: "Salsa Fusion",
+                    description: "Experience the fiery passion of salsa with dynamic fusion moves.",
+                    location: "Glasgow Dance Studio - Room A",
                     price: 15,
-                    timeslots: ["27/04/2025 - 08:00 - 09:00", "29/04/2025 - 18:00 - 19:00"],
+                    timeslots: [
+                        "25/04/2025 - 18:00 - 19:30",
+                        "27/04/2025 - 18:00 - 19:30"
+                    ],
                     participants: []
                 },
                 {
-                    name: "PILATES",
-                    description: "Core strength and flexibility",
-                    location: "Glasgow office - studio 3",
-                    price: 14,
-                    timeslots: ["28/04/2025 - 11:00 - 12:00", "30/04/2025 - 16:00 - 17:00"],
+                    name: "Tango Basics",
+                    description: "Learn the fundamentals of the sultry Argentine tango.",
+                    location: "Glasgow Dance Studio - Room B",
+                    price: 18,
+                    timeslots: [
+                        "26/04/2025 - 19:00 - 20:30",
+                        "28/04/2025 - 19:00 - 20:30"
+                    ],
+                    participants: []
+                },
+                {
+                    name: "Hip-Hop Groove",
+                    description: "Get into the rhythm with high-energy hip-hop dance sessions.",
+                    location: "Glasgow Urban Dance Center",
+                    price: 20,
+                    timeslots: [
+                        "27/04/2025 - 20:00 - 21:30",
+                        "29/04/2025 - 20:00 - 21:30"
+                    ],
+                    participants: []
+                },
+                {
+                    name: "Ballet Expression",
+                    description: "Explore classical ballet techniques with a modern twist.",
+                    location: "Glasgow Ballet Studio",
+                    price: 22,
+                    timeslots: [
+                        "28/04/2025 - 17:00 - 18:30",
+                        "30/04/2025 - 17:00 - 18:30"
+                    ],
                     participants: []
                 }
             ];
@@ -106,56 +118,55 @@ function seedCourses() {
             if (err) return reject(err);
             const courses = [
                 {
-                    name: "AADP",
-                    description: "Bunch AADP",
-                    startDate: "2025-04-01",
-                    duration: 8,
-                    schedule: ["Monday", "Tuesday", "Wednesday"],
-                    price: 100,
-                    location: "Studio 1",
-                    startTime: "09:00",
-                    endTime: "12:00",
-                    participants: []
-                },
-                {
-                    name: "Salsa Beginners",
-                    description: "Learn basic Salsa moves",
+                    name: "Salsa Intensive",
+                    description: "Master the art of salsa with immersive sessions focusing on technique and performance.",
                     startDate: "2025-05-01",
                     duration: 6,
-                    schedule: ["Thursday", "Friday"],
-                    price: 80,
-                    location: "Dance Hall A",
+                    schedule: ["Monday", "Wednesday", "Friday"],
+                    price: 200,
+                    location: "Dance Studio A",
                     startTime: "18:00",
                     endTime: "20:00",
                     participants: []
                 },
                 {
-                    name: "Hip Hop Jam",
-                    description: "Hip Hop dance classes",
+                    name: "Hip-Hop Mastery",
+                    description: "Advanced hip-hop techniques and performance training for dedicated dancers.",
                     startDate: "2025-06-01",
-                    duration: 10,
-                    schedule: ["Wednesday", "Saturday"],
-                    price: 120,
-                    location: "Urban Studio",
-                    startTime: "17:00",
-                    endTime: "19:00",
+                    duration: 8,
+                    schedule: ["Tuesday", "Thursday"],
+                    price: 250,
+                    location: "Urban Dance Studio",
+                    startTime: "19:00",
+                    endTime: "21:00",
                     participants: []
                 },
                 {
-                    name: "Ballet Intensive",
-                    description: "Advanced ballet technique",
+                    name: "Ballet Fundamentals",
+                    description: "Discover classical ballet techniques and build a strong foundation in movement.",
                     startDate: "2025-07-01",
                     duration: 4,
-                    schedule: ["Monday", "Friday"],
-                    price: 150,
+                    schedule: ["Wednesday", "Saturday"],
+                    price: 180,
                     location: "Ballet Studio",
-                    startTime: "14:00",
-                    endTime: "16:00",
+                    startTime: "15:00",
+                    endTime: "17:00",
+                    participants: []
+                },
+                {
+                    name: "Contemporary Dance Workshop",
+                    description: "Explore modern dance styles and express yourself through movement.",
+                    startDate: "2025-08-01",
+                    duration: 5,
+                    schedule: ["Monday", "Thursday"],
+                    price: 220,
+                    location: "Contemporary Dance Studio",
+                    startTime: "17:30",
+                    endTime: "19:30",
                     participants: []
                 }
             ];
 
-            // Compute endDate for each course using computeCourseEndDate.
             courses.forEach(course => {
                 course.endDate = computeCourseEndDate(course.startDate, course.duration, course.schedule);
             });
