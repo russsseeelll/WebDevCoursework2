@@ -339,3 +339,67 @@ footer a:hover {
     .card-text, .card-body ul li { font-size: 1rem !important; }
     .btn { font-size: 1rem !important; padding: 10px 18px !important; }
 }
+
+
+/* Increase default font size and adjust spacing on small screens */
+@media (max-width: 480px) {
+    html, body {
+        font-size: 18px !important;
+        line-height: 1.4 !important;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden; /* Helps prevent horizontal scrolling if elements get wide */
+    }
+
+    .navbar-brand {
+        font-size: 1.6rem !important;
+    }
+
+    .nav-link {
+        font-size: 1rem !important;
+    }
+
+    .hero {
+        padding: 40px 15px !important;
+    }
+
+    .hero .hero-title {
+        font-size: 2.2rem !important;
+    }
+
+    .hero .hero-text {
+        font-size: 1.2rem !important;
+    }
+
+    .hero .hero-btn {
+        font-size: 1rem !important;
+        padding: 10px 20px !important;
+    }
+
+    .page-content,
+    .container {
+        padding: 20px !important;
+        max-width: 100% !important;
+    }
+
+    .page-content h2 {
+        font-size: 2rem !important;
+    }
+
+    .card-title {
+        font-size: 1.4rem !important;
+    }
+
+    .card-text,
+    .card-body ul li,
+    label,
+    input,
+    button {
+        font-size: 1rem !important;
+    }
+
+    .btn {
+        font-size: 1rem !important;
+        padding: 10px 20px !important;
+    }
+}
