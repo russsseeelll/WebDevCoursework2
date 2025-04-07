@@ -1,4 +1,3 @@
-/* Global Styles */
 html, body {
     height: 100%;
     margin: 0;
@@ -13,8 +12,6 @@ body {
 .container {
     flex: 1;
 }
-
-/* Navbar */
 .navbar {
     background-color: #ffffff;
     border-bottom: 1px solid #e0e0e0;
@@ -33,8 +30,6 @@ body {
     color: #ff4081;
     font-weight: bold;
 }
-
-/* Hero Section */
 .hero {
     background-color: #ff4081;
     color: #fff;
@@ -57,16 +52,12 @@ body {
     font-size: 1rem;
     padding: 10px 20px;
 }
-
-/* Page Content Container */
 .page-content {
     padding: 40px 20px;
     background-color: #fff;
     border-radius: 10px;
     margin-bottom: 30px;
 }
-
-/* Section Headers */
 .page-content h2 {
     font-size: 2.5rem;
     font-weight: 700;
@@ -76,8 +67,6 @@ body {
     padding-bottom: 10px;
     margin-bottom: 30px;
 }
-
-/* Card Styling */
 .card {
     border-radius: 10px;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -89,8 +78,6 @@ body {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
     border-color: #ff4081;
 }
-
-/* Card Body and Text */
 .card-body {
     padding: 20px;
 }
@@ -105,8 +92,6 @@ body {
     color: #666;
     margin-bottom: 15px;
 }
-
-/* List Styling inside Cards */
 .card-body ul {
     list-style-type: none;
     padding-left: 0;
@@ -117,8 +102,6 @@ body {
     color: #555;
     margin-bottom: 5px;
 }
-
-/* Button Enhancements and Bootstrap Overrides */
 .btn,
 .btn:hover,
 .btn:focus,
@@ -134,7 +117,6 @@ body {
     outline: none !important;
     box-shadow: none !important;
 }
-
 .btn-outline-primary {
     border: 2px solid #ff4081 !important;
     color: #ff4081 !important;
@@ -147,7 +129,6 @@ body {
     background-color: #ff4081 !important;
     color: #fff !important;
 }
-/* Button Enhancements and Bootstrap Overrides */
 .btn,
 .btn:hover,
 .btn:focus,
@@ -155,8 +136,6 @@ body {
     outline: none !important;
     box-shadow: none !important;
 }
-
-/* Primary Button: Accent Pink */
 .btn-primary {
     background-color: #ff4081;
     border-color: #ff4081;
@@ -166,12 +145,10 @@ body {
 .btn-primary:hover,
 .btn-primary:focus,
 .btn-primary:active {
-    background-color: #e63970; /* slightly darker pink */
+    background-color: #e63970;
     border-color: #e63970;
     color: #fff;
 }
-
-/* Secondary Button: Deep Purple */
 .btn-secondary {
     background-color: #6a1b9a;
     border-color: #6a1b9a;
@@ -185,8 +162,6 @@ body {
     border-color: #5e1788;
     color: #fff;
 }
-
-/* Warning Button: Amber */
 .btn-warning {
     background-color: #ffb300;
     border-color: #ffb300;
@@ -200,8 +175,6 @@ body {
     border-color: #e6a200;
     color: #fff;
 }
-
-/* Info Button: Blue */
 .btn-info {
     background-color: #2196f3;
     border-color: #2196f3;
@@ -215,8 +188,6 @@ body {
     border-color: #1976d2;
     color: #fff;
 }
-
-/* Danger Button: Red */
 .btn-danger {
     background-color: #e53935;
     border-color: #e53935;
@@ -230,8 +201,6 @@ body {
     border-color: #d32f2f;
     color: #fff;
 }
-
-/* Footer */
 footer {
     background-color: #222;
     color: #aaa;
@@ -245,8 +214,6 @@ footer a {
 footer a:hover {
     color: #fff;
 }
-
-/* Flash Messages Styling */
 .flash-message {
     margin: 1em 0;
     padding: 1em;
@@ -265,8 +232,6 @@ footer a:hover {
     color: #a94442;
     border: 1px solid #ebccd1;
 }
-
-/* Responsive Adjustments */
 @media (max-width: 768px) {
     .page-content {
         padding: 20px;
@@ -289,18 +254,57 @@ footer a:hover {
         font-size: 1rem;
     }
 }
-/* Custom Pagination Styles */
+@media (max-width: 480px) {
+    .navbar-brand {
+        font-size: 1.5rem;
+    }
+    .nav-link {
+        margin-right: 0.5rem;
+        font-size: 0.9rem;
+    }
+    .hero {
+        padding: 40px 10px;
+    }
+    .hero .hero-title {
+        font-size: 1.8rem;
+    }
+    .hero .hero-text {
+        font-size: 0.9rem;
+    }
+    .hero .hero-btn {
+        font-size: 0.9rem;
+        padding: 8px 16px;
+    }
+    .page-content {
+        padding: 15px;
+    }
+    .page-content h2 {
+        font-size: 1.8rem;
+    }
+    .card {
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-size: 1.2rem;
+    }
+    .card-text,
+    .card-body ul li {
+        font-size: 0.85rem;
+    }
+    .btn {
+        font-size: 0.9rem;
+        padding: 8px 14px;
+    }
+}
 .pagination {
     display: flex;
     justify-content: center;
     padding: 1rem 0;
     margin: 0;
 }
-
 .pagination .page-item {
     margin: 0 0.3rem;
 }
-
 .pagination .page-link {
     color: #ff4081;
     border: 2px solid #ff4081;
@@ -310,13 +314,11 @@ footer a:hover {
     text-decoration: none;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
-
 .pagination .page-link:hover,
 .pagination .page-link:focus {
     background-color: #ff4081;
     color: #fff;
 }
-
 .pagination .page-item.active .page-link {
     background-color: #ff4081;
     color: #fff;
