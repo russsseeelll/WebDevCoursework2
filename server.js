@@ -17,6 +17,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Parse URL-encoded bodies.
 app.use(express.urlencoded({ extended: true }));
 
+app.use((req, res, next) => {
+    res.locals.demoMode = process.env.DEMO_MODE === 'true';
+    next();
+});
+
 // Setup session and flash middleware.
 app.use(session({
     secret: 'your-secret-key',
