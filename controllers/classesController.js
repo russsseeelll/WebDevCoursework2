@@ -1,6 +1,4 @@
-/**
- * controllers/classesController.js
- */
+// classesController.js
 
 const classModel = require('../models/class');
 const bookingModel = require('../models/booking');

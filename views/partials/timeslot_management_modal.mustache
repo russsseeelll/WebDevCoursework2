@@ -11,7 +11,14 @@
                     <div class="mb-3">
                         <label class="form-label">Existing Timeslots:</label>
                         <div id="tmTimeslotList" class="d-flex flex-wrap gap-2">
+                            {{#timeslots}}
+                                <button type="button" class="btn btn-outline-secondary">{{.}}</button>
+                            {{/timeslots}}
+                            {{^timeslots}}
+                                <p>No timeslots available</p>
+                            {{/timeslots}}
                         </div>
+
                     </div>
                     <hr>
                     <h6>Add New Timeslot</h6>
