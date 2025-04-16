@@ -11,14 +11,9 @@
                     <div class="mb-3">
                         <label class="form-label">Existing Timeslots:</label>
                         <div id="tmTimeslotList" class="d-flex flex-wrap gap-2">
-                            {{#timeslots}}
-                                <button type="button" class="btn btn-outline-secondary">{{.}}</button>
-                            {{/timeslots}}
-                            {{^timeslots}}
-                                <p>No timeslots available</p>
-                            {{/timeslots}}
+                            <!-- The list will be populated dynamically -->
+                            <p>No timeslots available</p>
                         </div>
-
                     </div>
                     <hr>
                     <h6>Add New Timeslot</h6>
@@ -38,6 +33,7 @@
                         </div>
                     </div>
                     <button type="button" class="btn btn-outline-primary mb-3" id="tmAddBtn">Add Timeslot</button>
+                    <!-- Hidden field to hold the timeslot CSV (if needed on submit) -->
                     <input type="hidden" id="tmTimeslotsCSV" name="timeslotsCSV" value="">
                 </div>
                 <div class="modal-footer">
@@ -48,3 +44,43 @@
         </div>
     </div>
 </div>
+
+<!-- JavaScript to populate the timeslot list when the modal opens -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var timeslotModalEl = document.getElementById('timeslotManagementModal');
+
+        // Listen for the Bootstrap modal 'show' event.
+        timeslotModalEl.addEventListener('show.bs.modal', function(event) {
+            // The button that triggered the modal (it must have our data attributes)
+            var triggerButton = event.relatedTarget;
+            if (!triggerButton) {
+                return;
+            }
+
+            // Extract data attributes from the trigger button.
+            var classId = triggerButton.getAttribute('data-class-id') || "";
+            var className = triggerButton.getAttribute('data-class-name') || "";
+            var timeslotsCSV = triggerButton.getAttribute('data-timeslots') || "";
+
+            // Update modal fields with the class data.
+            document.getElementById('tmClassId').value = classId;
+            document.getElementById('tmClassName').textContent = className;
+            document.getElementById('tmTimeslotsCSV').value = timeslotsCSV;
+
+            // Populate the timeslot list.
+            var timeslotListEl = document.getElementById('tmTimeslotList');
+            if (timeslotsCSV.trim() !== "") {
+                // Split the CSV into an array and trim any whitespace.
+                var timeslots = timeslotsCSV.split(',').map(function(ts) { return ts.trim(); });
+                var htmlContent = "";
+                timeslots.forEach(function(ts) {
+                    htmlContent += '<button type="button" class="btn btn-outline-secondary">' + ts + '</button>';
+                });
+                timeslotListEl.innerHTML = htmlContent;
+            } else {
+                timeslotListEl.innerHTML = '<p>No timeslots available</p>';
+            }
+        });
+    });
+</script>
