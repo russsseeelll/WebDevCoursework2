@@ -1,11 +1,8 @@
-/**
- * controllers/dashboardController.js
- */
-
 const courseModel = require('../models/course');
 const classModel = require('../models/class');
 const userModel = require('../models/user');
 
+// render dashboard by fetching courses, classes, and users
 exports.getDashboard = (req, res) => {
     courseModel.getCourses({}, (err, courses) => {
         if (err) courses = [];
@@ -14,7 +11,7 @@ exports.getDashboard = (req, res) => {
             userModel.getUsers({}, (err, users) => {
                 if (err) users = [];
                 res.renderWithLayout('./admin/dashboard', {
-                    title: 'Organiser Dashboard',
+                    title: 'organiser dashboard',
                     active: { dashboard: true },
                     year: new Date().getFullYear(),
                     courses: courses,
@@ -26,6 +23,7 @@ exports.getDashboard = (req, res) => {
     });
 };
 
+// check if user is logged in and has organiser role, otherwise redirect
 exports.isAuthedAsOrganiser = (req, res, next) => {
     if (req.session && req.session.user && req.session.user.role === 'organiser') {
         return next();
@@ -35,4 +33,3 @@ exports.isAuthedAsOrganiser = (req, res, next) => {
     }
     return res.redirect('/auth/login');
 };
-

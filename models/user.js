@@ -1,6 +1,3 @@
-/**
- * models/user.js
- */
 const Datastore = require('nedb');
 const path = require('path');
 
@@ -12,7 +9,6 @@ const db = new Datastore({
 module.exports = {
     db,
     addUser: (user, callback) => {
-        // user object may include mobile and isregistered
         db.insert(user, callback);
     },
     getUsers: (query, callback) => {

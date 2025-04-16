@@ -403,3 +403,8 @@ footer a:hover {
         padding: 10px 20px !important;
     }
 }
+
+#courseDatesList .date-badge {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.75rem;
+}

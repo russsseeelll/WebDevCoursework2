@@ -1,13 +1,13 @@
-/**
- * routes/booking.js
- */
 const express = require('express');
 const router = express.Router();
 const bookingController = require('../controllers/bookingController');
 
-router.get('/bookCourse', bookingController.getBookCourse);
-router.post('/bookCourse', bookingController.postBookCourse);
-router.get('/bookClass', bookingController.getBookClass);
-router.post('/bookClass', bookingController.postBookClass);
+router.get('/bookcourse', bookingController.getBookCourse);
+
+router.post('/bookcourse', bookingController.postBookCourse);
+
+router.get('/bookclass', bookingController.getBookClass);
+
+router.post('/bookclass', bookingController.postBookClass);
 
 module.exports = router;

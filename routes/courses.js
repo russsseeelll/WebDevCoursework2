@@ -1,9 +1,3 @@
-/**
- * routes/courses.js
- * -----------------
- * Routes for managing course operations.
- */
-
 const express = require('express');
 const router = express.Router();
 const coursesController = require('../controllers/coursesController');

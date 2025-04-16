@@ -76,3 +76,67 @@ function updateTimeslotsCSV() {
     });
     document.getElementById('tmTimeslotsCSV').value = timeslots.join(',');
 }
+
+
+//bookclass.mustache
+const timeButtons = document.querySelectorAll('.class-time-btn');
+timeButtons.forEach(button => {
+    button.addEventListener('click', function() {
+        timeButtons.forEach(btn => {
+            btn.classList.remove('btn-success');
+            btn.classList.add('btn-outline-secondary');
+        });
+        this.classList.remove('btn-outline-secondary');
+        this.classList.add('btn-success');
+        document.getElementById('selectedClassTimeInput').value = this.getAttribute('data-time');
+    });
+});
+
+//bookcourse.mustache
+document.addEventListener("DOMContentLoaded", function() {
+    const courseData = document.getElementById('courseData');
+    const duration = parseInt(courseData.getAttribute('data-duration'), 10);
+    const scheduleStr = courseData.getAttribute('data-schedule');
+    const schedule = scheduleStr.split(',').filter(day => day.trim() !== "");
+
+    function getAvailableDates(duration, schedule) {
+        const availableDates = [];
+        const today = new Date();
+        const endDate = new Date();
+        endDate.setDate(today.getDate() + duration * 7);
+        const weekdayMap = {
+            "Sunday": 0,
+            "Monday": 1,
+            "Tuesday": 2,
+            "Wednesday": 3,
+            "Thursday": 4,
+            "Friday": 5,
+            "Saturday": 6
+        };
+        const scheduledDays = schedule.map(day => weekdayMap[day]);
+        for (let d = new Date(today); d <= endDate; d.setDate(d.getDate() + 1)) {
+            if (scheduledDays.includes(d.getDay())) {
+                const yyyy = d.getFullYear();
+                let mm = d.getMonth() + 1;
+                let dd = d.getDate();
+                if (mm < 10) mm = '0' + mm;
+                if (dd < 10) dd = '0' + dd;
+                availableDates.push(`${yyyy}-${mm}-${dd}`);
+            }
+        }
+        return availableDates;
+    }
+
+    const availableDates = getAvailableDates(duration, schedule);
+    const datesList = document.getElementById('courseDatesList');
+    datesList.innerHTML = "";
+    availableDates.forEach(dateStr => {
+        const parts = dateStr.split('-');
+        const formatted = parts[2] + '-' + parts[1] + '-' + parts[0];
+        const span = document.createElement('span');
+        span.className = 'badge bg-light border text-dark date-badge';
+        span.textContent = formatted;
+        datesList.appendChild(span);
+    });
+    document.getElementById('selectedDatesInput').value = availableDates.join(',');
+});

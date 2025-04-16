@@ -1,8 +1,7 @@
-// classesController.js
-
 const classModel = require('../models/class');
 const bookingModel = require('../models/booking');
 
+// return all classes as json
 exports.getClasses = (req, res) => {
     classModel.getClasses({}, (err, classes) => {
         if (err) {
@@ -15,7 +14,7 @@ exports.getClasses = (req, res) => {
     });
 };
 
-
+// add a new class with details from the request
 exports.addClass = (req, res) => {
     const newClass = {
         name: req.body.className,
@@ -28,14 +27,15 @@ exports.addClass = (req, res) => {
 
     classModel.addClass(newClass, (err) => {
         if (err) {
-            req.flash('error', 'Error adding class: ' + err.message);
+            req.flash('error', 'error adding class: ' + err.message);
             return res.redirect('/dashboard');
         }
-        req.flash('success', 'Class added successfully');
+        req.flash('success', 'class added successfully');
         res.redirect('/dashboard');
     });
 };
 
+// edit an existing class with updated details
 exports.editClass = (req, res) => {
     const classId = req.body.classId;
     const update = {
@@ -47,32 +47,33 @@ exports.editClass = (req, res) => {
 
     classModel.updateClass(classId, update, (err) => {
         if (err) {
-            req.flash('error', 'Error editing class: ' + err.message);
+            req.flash('error', 'error editing class: ' + err.message);
             return res.redirect('/dashboard');
         }
-        req.flash('success', 'Class updated successfully');
+        req.flash('success', 'class updated successfully');
         res.redirect('/dashboard');
     });
 };
 
+// delete a class and its related bookings
 exports.deleteClass = (req, res) => {
     const classId = req.body.classId;
     classModel.deleteClass(classId, (err) => {
         if (err) {
-            req.flash('error', 'Error deleting class: ' + err.message);
+            req.flash('error', 'error deleting class: ' + err.message);
             return res.redirect('/dashboard');
         }
         bookingModel.deleteBookings({ bookingType: 'class', itemId: classId }, (err) => {
             if (err) {
-                console.error('Error deleting bookings for class:', err);
+                console.error('error deleting bookings for class:', err);
             }
-            req.flash('success', 'Class deleted successfully.');
+            req.flash('success', 'class deleted successfully.');
             res.redirect('/dashboard');
         });
     });
 };
 
-
+// update available timeslots for a class
 exports.updateTimeslots = (req, res) => {
     let timeslots = [];
     if (req.body.timeslotsCSV) {
@@ -82,14 +83,15 @@ exports.updateTimeslots = (req, res) => {
 
     classModel.updateClass(classId, { timeslots: timeslots }, (err) => {
         if (err) {
-            req.flash('error', 'Error updating timeslots: ' + err.message);
+            req.flash('error', 'error updating timeslots: ' + err.message);
             return res.redirect('/dashboard');
         }
-        req.flash('success', 'Timeslots updated successfully');
+        req.flash('success', 'timeslots updated successfully');
         res.redirect('/dashboard');
     });
 };
 
+// return participants for a given class as json
 exports.getParticipants = (req, res) => {
     const classId = req.query.classId;
     classModel.getClassById(classId, (err, classObj) => {
@@ -99,6 +101,7 @@ exports.getParticipants = (req, res) => {
     });
 };
 
+// add a participant to a class
 exports.addParticipant = (req, res) => {
     const classId = req.body.classId;
     const participant = {
@@ -108,7 +111,7 @@ exports.addParticipant = (req, res) => {
 
     classModel.getClassById(classId, (err, classObj) => {
         if (err || !classObj) {
-            req.flash('error', 'Class not found');
+            req.flash('error', 'class not found');
             return res.redirect('/dashboard');
         }
         classObj.participants = classObj.participants || [];
@@ -116,10 +119,10 @@ exports.addParticipant = (req, res) => {
 
         classModel.updateClass(classId, { participants: classObj.participants }, (err) => {
             if (err) {
-                req.flash('error', 'Error adding participant: ' + err.message);
+                req.flash('error', 'error adding participant: ' + err.message);
                 return res.redirect('/dashboard');
             }
-            req.flash('success', 'Participant added successfully');
+            req.flash('success', 'participant added successfully');
             res.redirect('/dashboard');
         });
     });

@@ -1,23 +1,19 @@
-/**
- * controllers/usersController.js
- */
-
-
 const userModel = require('../models/user');
 const bookingModel = require('../models/booking');
 
+// show the current user's bookings if logged in
 exports.getManageBookings = (req, res) => {
     if (!req.session.user) {
-        req.flash('error', 'Please login to view your bookings.');
+        req.flash('error', 'please login to view your bookings.');
         return res.redirect('/auth/login');
     }
     bookingModel.getBookingsByUserId(req.session.user._id, (err, bookings) => {
         if (err) {
-            req.flash('error', 'Error fetching bookings: ' + err.message);
+            req.flash('error', 'error fetching bookings: ' + err.message);
             bookings = [];
         }
         res.renderWithLayout('manageBookings', {
-            title: 'My Bookings',
+            title: 'my bookings',
             active: { bookings: true },
             year: new Date().getFullYear(),
             bookings: bookings
@@ -25,18 +21,19 @@ exports.getManageBookings = (req, res) => {
     });
 };
 
+// show the profile page for the current user
 exports.getManageProfile = (req, res) => {
     if (!req.session.user) {
-        req.flash('error', 'Please login to view your profile.');
+        req.flash('error', 'please login to view your profile.');
         return res.redirect('/auth/login');
     }
     userModel.getUserById(req.session.user._id, (err, user) => {
         if (err || !user) {
-            req.flash('error', 'User not found.');
+            req.flash('error', 'user not found.');
             return res.redirect('/dashboard');
         }
         res.renderWithLayout('./manage/manageProfile', {
-            title: 'Manage Profile',
+            title: 'manage profile',
             active: { profile: true },
             year: new Date().getFullYear(),
             user: user
@@ -44,9 +41,10 @@ exports.getManageProfile = (req, res) => {
     });
 };
 
+// update the current user's profile info
 exports.postManageProfile = (req, res) => {
     if (!req.session.user) {
-        req.flash('error', 'Please login to update your profile.');
+        req.flash('error', 'please login to update your profile.');
         return res.redirect('/auth/login');
     }
     const update = {
@@ -55,28 +53,26 @@ exports.postManageProfile = (req, res) => {
     };
     userModel.updateUser(req.session.user._id, update, (err) => {
         if (err) {
-            req.flash('error', 'Error updating profile: ' + err.message);
+            req.flash('error', 'error updating profile: ' + err.message);
             return res.redirect('/manageProfile');
         }
-        // Update session info
         req.session.user.name = update.name;
         req.session.user.mobile = update.mobile;
-        // Also update bookings for consistency
+        // also update the user's bookings for consistency
         bookingModel.updateBookingsByUserId(req.session.user._id, {
             contactName: update.name,
             contactMobile: update.mobile
         }, (updateErr) => {
             if (updateErr) {
-                console.error("Error updating bookings for profile update", updateErr);
+                console.error("error updating bookings for profile update", updateErr);
             }
-            req.flash('success', 'Profile updated successfully.');
+            req.flash('success', 'profile updated successfully.');
             res.redirect('/manageProfile');
         });
     });
 };
 
-
-
+// get all users and return as json
 exports.getUsers = (req, res) => {
     userModel.getUsers({}, (err, users) => {
         if (err) return res.status(500).send(err);
@@ -84,18 +80,19 @@ exports.getUsers = (req, res) => {
     });
 };
 
+// add a new user from submitted data
 exports.addUser = (req, res) => {
     const user = {
         name: req.body.userName,
         email: req.body.userEmail,
         role: req.body.userRole || 'user',
         password: req.body.userPassword,
-        mobile: req.body.userMobile  // Added mobile field
+        mobile: req.body.userMobile
     };
 
     userModel.addUser(user, (err, savedUser) => {
         if (err) {
-            req.flash('error', 'Error adding user: ' + err.message);
+            req.flash('error', 'error adding user: ' + err.message);
             return res.redirect('/dashboard');
         }
         bookingModel.updateBookingsByUserId(savedUser._id, {
@@ -104,23 +101,22 @@ exports.addUser = (req, res) => {
             contactMobile: user.mobile
         }, (updateErr) => {
             if (updateErr) {
-                console.error("Error updating bookings for new user", updateErr);
+                console.error("error updating bookings for new user", updateErr);
             }
-            req.flash('success', 'User added successfully');
+            req.flash('success', 'user added successfully');
             res.redirect('/dashboard');
         });
     });
 };
 
-
-
+// update an existing user's details
 exports.editUser = (req, res) => {
     const userId = req.body.userId;
     const update = {
         name: req.body.userName,
         email: req.body.userEmail,
         role: req.body.userRole,
-        mobile: req.body.userMobile  // Include mobile field
+        mobile: req.body.userMobile
     };
 
     if (req.body.userPassword && req.body.userPassword.trim() !== '') {
@@ -129,32 +125,33 @@ exports.editUser = (req, res) => {
 
     userModel.updateUser(userId, update, (err) => {
         if (err) {
-            req.flash('error', 'Error editing user: ' + err.message);
+            req.flash('error', 'error editing user: ' + err.message);
             return res.redirect('/dashboard');
         }
-        // Update the booking records for this user
+        // update booking records for consistency
         bookingModel.updateBookingsByUserId(userId, {
             contactName: update.name,
             contactEmail: update.email,
             contactMobile: update.mobile
         }, (updateErr) => {
             if (updateErr) {
-                console.error("Error updating bookings for user", updateErr);
+                console.error("error updating bookings for user", updateErr);
             }
-            req.flash('success', 'User updated successfully');
+            req.flash('success', 'user updated successfully');
             res.redirect('/dashboard');
         });
     });
 };
 
+// delete a user based on the provided id
 exports.deleteUser = (req, res) => {
     const userId = req.body.userId;
     userModel.deleteUser(userId, (err) => {
         if (err) {
-            req.flash('error', 'Error deleting user: ' + err.message);
+            req.flash('error', 'error deleting user: ' + err.message);
             return res.redirect('/dashboard');
         }
-        req.flash('success', 'User deleted successfully');
+        req.flash('success', 'user deleted successfully');
         res.redirect('/dashboard');
     });
 };

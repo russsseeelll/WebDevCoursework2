@@ -1,4 +1,3 @@
-// models/course.js
 const Datastore = require('nedb');
 const path = require('path');
 

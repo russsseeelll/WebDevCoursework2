@@ -2,21 +2,23 @@ const passport = require('passport');
 const userModel = require('../models/user');
 const crypto = require('crypto');
 
+// render the login page or redirect if already logged in
 exports.getLogin = (req, res) => {
     if (req.session.user) return res.redirect('/dashboard');
     res.renderWithLayout('auth/login', {
-        title: 'Login',
+        title: 'login',
         active: { login: true },
         year: new Date().getFullYear(),
-        services: ['GitHub', 'Facebook']
+        services: ['github', 'facebook']
     });
 };
 
+// process login using local strategy and set session on success
 exports.postLogin = (req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
         if (err) return next(err);
         if (!user) {
-            req.flash('error', info.message || 'Login failed.');
+            req.flash('error', info.message || 'login failed.');
             return res.redirect('/auth/login');
         }
         req.logIn(user, (err) => {
@@ -33,15 +35,17 @@ exports.postLogin = (req, res, next) => {
     })(req, res, next);
 };
 
+// render the registration page or redirect if already logged in
 exports.getRegister = (req, res) => {
     if (req.session.user) return res.redirect('/');
     res.renderWithLayout('auth/register', {
-        title: 'Register',
+        title: 'register',
         active: { register: true },
         year: new Date().getFullYear()
     });
 };
 
+// merge duplicate accounts to avoid repeated records
 function mergeDuplicateUsers(email, newData, callback) {
     userModel.getUsers({ email: email }, (err, users) => {
         if (err) return callback(err);
@@ -57,7 +61,7 @@ function mergeDuplicateUsers(email, newData, callback) {
             if (count === 0) return callback(null, master);
             duplicates.forEach(dup => {
                 userModel.deleteUser(dup._id, (err) => {
-                    if (err) console.error('Error deleting duplicate user:', err);
+                    if (err) console.error('error deleting duplicate user:', err);
                     count--;
                     if (count === 0) callback(null, master);
                 });
@@ -66,43 +70,43 @@ function mergeDuplicateUsers(email, newData, callback) {
     });
 }
 
+// handle user registration, merging duplicates if needed
 exports.postRegister = (req, res) => {
     const { username, email, password } = req.body;
 
     mergeDuplicateUsers(email, { name: username, password: password, isregistered: true }, (err, mergedUser) => {
         if (err) {
-            req.flash('error', 'Registration failed.');
+            req.flash('error', 'registration failed.');
             return res.redirect('/auth/register');
         }
         if (mergedUser) {
-
             if (mergedUser.isregistered === false) {
-                req.flash('success', 'Registration successful. Please log in.');
+                req.flash('success', 'registration successful. please log in.');
                 return res.redirect('/auth/login');
             } else {
-                req.flash('error', 'Email already registered.');
+                req.flash('error', 'email already registered.');
                 return res.redirect('/auth/register');
             }
         } else {
-
             const newUser = { name: username, email, password, role: 'user', isregistered: true };
             userModel.addUser(newUser, (err, savedUser) => {
                 if (err) {
-                    req.flash('error', 'Error adding user: ' + err.message);
+                    req.flash('error', 'error adding user: ' + err.message);
                     return res.redirect('/auth/register');
                 }
-                req.flash('success', 'Registration successful. Please log in.');
+                req.flash('success', 'registration successful. please log in.');
                 res.redirect('/auth/login');
             });
         }
     });
 };
 
+// handle external authentication callback and merge or create a user
 exports.externalAuthCallback = (req, res) => {
     const externalUser = req.user;
     mergeDuplicateUsers(externalUser.email, { isregistered: true }, (err, mergedUser) => {
         if (err) {
-            req.flash('error', 'Error during external authentication.');
+            req.flash('error', 'error during external authentication.');
             return res.redirect('/auth/login');
         }
         if (!mergedUser) {
@@ -116,7 +120,7 @@ exports.externalAuthCallback = (req, res) => {
             };
             userModel.addUser(newUser, (err, savedUser) => {
                 if (err || !savedUser) {
-                    req.flash('error', 'Error creating user from external login.');
+                    req.flash('error', 'error creating user from external login.');
                     return res.redirect('/auth/login');
                 }
                 if (!savedUser._id) savedUser._id = savedUser.email;
@@ -143,6 +147,7 @@ exports.externalAuthCallback = (req, res) => {
     });
 };
 
+// log the user out and clear the session
 exports.logout = (req, res) => {
     req.logout(() => {
         req.session.destroy();

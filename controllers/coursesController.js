@@ -1,10 +1,7 @@
-/**
- * controllers/coursesController.js
- */
-
 const courseModel = require('../models/course');
 const bookingModel = require('../models/booking');
 
+// return all courses in json format
 exports.getCourses = (req, res) => {
     courseModel.getCourses({}, (err, courses) => {
         if (err) {
@@ -17,7 +14,7 @@ exports.getCourses = (req, res) => {
     });
 };
 
-
+// add a new course and calculate its end date
 exports.addCourse = (req, res) => {
     const course = {
         name: req.body.courseName,
@@ -32,19 +29,20 @@ exports.addCourse = (req, res) => {
         participants: []
     };
 
+    // calculate course end date based on duration and schedule
     course.endDate = getCourseEndDate(course);
 
     courseModel.addCourse(course, (err, newCourse) => {
         if (err) {
-            req.flash('error', 'Error adding course: ' + err.message);
+            req.flash('error', 'error adding course: ' + err.message);
             return res.redirect('/dashboard');
         }
-        req.flash('success', 'Course added successfully');
+        req.flash('success', 'course added successfully');
         res.redirect('/dashboard');
     });
 };
 
-
+// edit an existing course and recalc end date
 exports.editCourse = (req, res) => {
     const courseId = req.body.courseId;
     const update = {
@@ -59,45 +57,47 @@ exports.editCourse = (req, res) => {
         endTime: req.body.courseEndTime
     };
 
+    // recalc the end date with updated info
     update.endDate = getCourseEndDate(update);
 
     courseModel.updateCourse(courseId, update, (err) => {
         if (err) {
-            req.flash('error', 'Error editing course: ' + err.message);
+            req.flash('error', 'error editing course: ' + err.message);
             return res.redirect('/dashboard');
         }
-        req.flash('success', 'Course updated successfully');
+        req.flash('success', 'course updated successfully');
         res.redirect('/dashboard');
     });
 };
 
-
+// delete a course and remove its related bookings
 exports.deleteCourse = (req, res) => {
     const courseId = req.body.courseId;
     courseModel.deleteCourse(courseId, (err) => {
         if (err) {
-            req.flash('error', 'Error deleting course: ' + err.message);
+            req.flash('error', 'error deleting course: ' + err.message);
             return res.redirect('/dashboard');
         }
         bookingModel.deleteBookings({ bookingType: 'course', itemId: courseId }, (err) => {
             if (err) {
-                console.error('Error deleting bookings for course:', err);
+                console.error('error deleting bookings for course:', err);
             }
-            req.flash('success', 'Course deleted successfully.');
+            req.flash('success', 'course deleted successfully.');
             res.redirect('/dashboard');
         });
     });
 };
 
-
+// return course participants in json format
 exports.getParticipants = (req, res) => {
     const courseId = req.query.courseId;
     courseModel.getCourseById(courseId, (err, course) => {
-        if (err || !course) return res.status(500).send(err || 'Course not found');
+        if (err || !course) return res.status(500).send(err || 'course not found');
         res.json(course.participants || []);
     });
 };
 
+// add a new participant to a course
 exports.addParticipant = (req, res) => {
     const courseId = req.body.courseId;
     const participant = {
@@ -107,7 +107,7 @@ exports.addParticipant = (req, res) => {
 
     courseModel.getCourseById(courseId, (err, course) => {
         if (err || !course) {
-            req.flash('error', 'Course not found');
+            req.flash('error', 'course not found');
             return res.redirect('/dashboard');
         }
         course.participants = course.participants || [];
@@ -115,17 +115,17 @@ exports.addParticipant = (req, res) => {
 
         courseModel.updateCourse(courseId, { participants: course.participants }, (err) => {
             if (err) {
-                req.flash('error', 'Error adding participant: ' + err.message);
+                req.flash('error', 'error adding participant: ' + err.message);
                 return res.redirect('/dashboard');
             }
-            req.flash('success', 'Participant added successfully');
+            req.flash('success', 'participant added successfully');
             res.redirect('/dashboard');
         });
     });
 };
 
+// helper function to calculate course end date from duration and scheduled days
 function getCourseEndDate(course) {
-
     const duration = parseInt(course.duration, 10);
     if (isNaN(duration) || duration <= 0 || !course.schedule || !course.schedule.length) {
         return "";
@@ -134,16 +134,17 @@ function getCourseEndDate(course) {
     const startDate = course.startDate ? new Date(course.startDate) : new Date();
     const endDate = new Date(startDate);
 
+    // add weeks based on duration
     endDate.setDate(startDate.getDate() + duration * 7);
 
     const weekdayMap = {
-        "Sunday": 0,
-        "Monday": 1,
-        "Tuesday": 2,
-        "Wednesday": 3,
-        "Thursday": 4,
-        "Friday": 5,
-        "Saturday": 6
+        "sunday": 0,
+        "monday": 1,
+        "tuesday": 2,
+        "wednesday": 3,
+        "thursday": 4,
+        "friday": 5,
+        "saturday": 6
     };
 
     const scheduledDays = course.schedule.map(day => weekdayMap[day]).filter(n => n !== undefined);

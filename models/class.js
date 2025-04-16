@@ -1,4 +1,3 @@
-// models/class.js
 const Datastore = require('nedb');
 const path = require('path');
 
@@ -14,7 +13,6 @@ module.exports = {
     getClasses: (query, callback) => {
         db.find(query, callback);
     },
-    // New methods for pagination:
     countClasses: (query, callback) => {
         db.count(query, callback);
     },

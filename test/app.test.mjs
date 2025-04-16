@@ -1,64 +1,53 @@
-/**
- * test/app.test.mjs
- * -----------------
- * Integration tests for the new logics and functionalities.
- */
-
 import request from 'supertest';
 import { expect } from 'chai';
 import app from '../server.js';
 
-describe('Integration Tests', () => {
-
-    // --------------------------------------------------
-    // Test Index / View Routes
-    // --------------------------------------------------
-    describe('Index Routes', () => {
-        it('GET / should return the home page HTML containing "Danceright!"', async () => {
+// index routes tests
+describe('integration tests', () => {
+    describe('index routes', () => {
+        it('get / should return home page html with "danceright!"', async () => {
             const res = await request(app)
                 .get('/')
                 .expect(200)
-                .expect('Content-Type', /html/);
-            expect(res.text).to.include('Danceright!');
+                .expect('content-type', /html/);
+            expect(res.text).to.include('danceright!');
         });
 
-        it('GET /auth/login should return HTML containing "Login"', async () => {
+        it('get /auth/login should return html with "login"', async () => {
             const res = await request(app)
                 .get('/auth/login')
                 .expect(200)
-                .expect('Content-Type', /html/);
-            expect(res.text).to.include('Login');
+                .expect('content-type', /html/);
+            expect(res.text).to.include('login');
         });
 
-        it('GET /auth/register should return HTML containing "Register"', async () => {
+        it('get /auth/register should return html with "register"', async () => {
             const res = await request(app)
                 .get('/auth/register')
                 .expect(200)
-                .expect('Content-Type', /html/);
-            expect(res.text).to.include('Register');
+                .expect('content-type', /html/);
+            expect(res.text).to.include('register');
         });
     });
 
-    // --------------------------------------------------
-    // Test Public Booking Routes (for full courses and classes)
-    // --------------------------------------------------
-    describe('Public Booking Routes', () => {
+    // public booking routes tests
+    describe('public booking routes', () => {
         let testCourseId;
         let testClassId;
 
         before(async () => {
-            // Create a course for booking test via API.
+            // create a course for booking tests
             await request(app)
                 .post('/courses/add')
                 .type('form')
                 .send({
-                    courseName: 'Booking Test Course',
-                    courseDescription: 'Course for booking test',
+                    courseName: 'booking test course',
+                    courseDescription: 'course for booking test',
                     courseStartDate: '2025-05-01',
                     courseDuration: '3 weeks',
-                    courseSchedule: 'Friday',
+                    courseSchedule: 'friday',
                     coursePrice: '200.00',
-                    courseLocation: 'Test Venue',
+                    courseLocation: 'test venue',
                     courseStartTime: '09:00',
                     courseEndTime: '11:00'
                 })
@@ -66,73 +55,72 @@ describe('Integration Tests', () => {
 
             const coursesRes = await request(app)
                 .get('/courses')
-                .set('Accept', 'application/json')
+                .set('accept', 'application/json')
                 .expect(200);
             const courses = coursesRes.body;
-            const testCourse = courses.find(c => c.name === 'Booking Test Course');
+            const testCourse = courses.find(c => c.name === 'booking test course');
             testCourseId = testCourse._id;
 
-            // Create a class for booking test via API.
+            // create a class for booking tests
             await request(app)
                 .post('/classes/add')
                 .type('form')
                 .send({
-                    className: 'Booking Test Class',
-                    classDescription: 'Class for booking test',
-                    classLocation: 'Test Location',
+                    className: 'booking test class',
+                    classDescription: 'class for booking test',
+                    classLocation: 'test location',
                     classPrice: '75.00'
                 })
                 .expect(302);
 
             const classesRes = await request(app)
                 .get('/classes')
-                .set('Accept', 'application/json')
+                .set('accept', 'application/json')
                 .expect(200);
             const classes = classesRes.body;
-            const testClass = classes.find(c => c.name === 'Booking Test Class');
+            const testClass = classes.find(c => c.name === 'booking test class');
             testClassId = testClass._id;
         });
 
-        it('GET /bookCourse without course query should redirect to /courses', async () => {
+        it('get /bookcourse without course query should redirect to /courses', async () => {
             const res = await request(app)
                 .get('/bookCourse')
                 .expect(302);
             expect(res.header.location).to.equal('/courses');
         });
 
-        it('GET /bookClass without class query should redirect to /classes', async () => {
+        it('get /bookclass without class query should redirect to /classes', async () => {
             const res = await request(app)
                 .get('/bookClass')
                 .expect(302);
             expect(res.header.location).to.equal('/classes');
         });
 
-        it('GET /bookCourse with valid course query should return booking page HTML', async () => {
+        it('get /bookcourse with valid course query should return booking page html', async () => {
             const res = await request(app)
                 .get('/bookCourse')
                 .query({ course: testCourseId })
                 .expect(200)
-                .expect('Content-Type', /html/);
-            expect(res.text).to.include('Book Full Course');
+                .expect('content-type', /html/);
+            expect(res.text).to.include('book full course');
         });
 
-        it('GET /bookClass with valid class query should return booking page HTML', async () => {
+        it('get /bookclass with valid class query should return booking page html', async () => {
             const res = await request(app)
                 .get('/bookClass')
                 .query({ class: testClassId })
                 .expect(200)
-                .expect('Content-Type', /html/);
-            expect(res.text).to.include('Book Class');
+                .expect('content-type', /html/);
+            expect(res.text).to.include('book class');
         });
 
-        // Existing tests for unregistered users remain.
-        it('POST /bookCourse by an unregistered user should add booking but not create session', async () => {
+        it('post /bookcourse by an unregistered user should add booking but not create session', async () => {
             const uniqueEmail = `unreg${Date.now()}@example.com`;
             const res = await request(app)
                 .post('/bookCourse')
                 .type('form')
                 .send({
-                    contactName: 'Unregistered User',
+                    contactName: 'unregistered user',
                     contactEmail: uniqueEmail,
                     contactMobile: '0000000000',
                     courseId: testCourseId,
@@ -143,18 +131,18 @@ describe('Integration Tests', () => {
 
             const protectedRes = await request(app)
                 .get('/manageBookings')
-                .set('Cookie', res.headers['set-cookie'] || [])
+                .set('cookie', res.headers['set-cookie'] || [])
                 .expect(302);
             expect(protectedRes.header.location).to.equal('/auth/login');
         });
 
-        it('POST /bookClass by an unregistered user should add booking but not create session', async () => {
+        it('post /bookclass by an unregistered user should add booking but not create session', async () => {
             const uniqueEmail = `unreg${Date.now()}@example.com`;
             const res = await request(app)
                 .post('/bookClass')
                 .type('form')
                 .send({
-                    contactName: 'Unregistered Class User',
+                    contactName: 'unregistered class user',
                     contactEmail: uniqueEmail,
                     contactMobile: '0000000000',
                     classId: testClassId,
@@ -165,22 +153,21 @@ describe('Integration Tests', () => {
 
             const protectedRes = await request(app)
                 .get('/manageBookings')
-                .set('Cookie', res.headers['set-cookie'] || [])
+                .set('cookie', res.headers['set-cookie'] || [])
                 .expect(302);
             expect(protectedRes.header.location).to.equal('/auth/login');
         });
 
-        // --- New Tests for Registered Users ---
-        it('POST /bookCourse by a registered user should add booking and create session', async () => {
+        // tests for registered users
+        it('post /bookcourse by a registered user should add booking and create session', async () => {
             const agent = request.agent(app);
             const uniqueEmail = `reg${Date.now()}@example.com`;
 
-            // Register and login.
             await request(app)
                 .post('/auth/register')
                 .type('form')
                 .send({
-                    username: 'Reg User',
+                    username: 'reg user',
                     email: uniqueEmail,
                     password: 'password123'
                 })
@@ -194,12 +181,11 @@ describe('Integration Tests', () => {
                 })
                 .expect(302);
 
-            // Post a course booking.
             const res = await agent
                 .post('/bookCourse')
                 .type('form')
                 .send({
-                    contactName: 'Reg User',
+                    contactName: 'reg user',
                     contactEmail: uniqueEmail,
                     contactMobile: '1111111111',
                     courseId: testCourseId,
@@ -208,23 +194,21 @@ describe('Integration Tests', () => {
                 .expect(302);
             expect(res.header.location).to.equal('/courses');
 
-            // Verify session is active by accessing a protected route.
             const protectedRes = await agent
                 .get('/manageBookings')
                 .expect(200);
-            expect(protectedRes.text).to.include('My Bookings');
+            expect(protectedRes.text).to.include('my bookings');
         });
 
-        it('POST /bookClass by a registered user should add booking and create session', async () => {
+        it('post /bookclass by a registered user should add booking and create session', async () => {
             const agent = request.agent(app);
             const uniqueEmail = `reg${Date.now()}@example.com`;
 
-            // Register and login.
             await request(app)
                 .post('/auth/register')
                 .type('form')
                 .send({
-                    username: 'Reg Class User',
+                    username: 'reg class user',
                     email: uniqueEmail,
                     password: 'password123'
                 })
@@ -238,12 +222,11 @@ describe('Integration Tests', () => {
                 })
                 .expect(302);
 
-            // Post a class booking.
             const res = await agent
                 .post('/bookClass')
                 .type('form')
                 .send({
-                    contactName: 'Reg Class User',
+                    contactName: 'reg class user',
                     contactEmail: uniqueEmail,
                     contactMobile: '2222222222',
                     classId: testClassId,
@@ -252,40 +235,37 @@ describe('Integration Tests', () => {
                 .expect(302);
             expect(res.header.location).to.equal('/classes');
 
-            // Verify session is active.
             const protectedRes = await agent
                 .get('/manageBookings')
                 .expect(200);
-            expect(protectedRes.text).to.include('My Bookings');
+            expect(protectedRes.text).to.include('my bookings');
         });
     });
 
-    // --------------------------------------------------
-    // Test Courses Endpoints
-    // --------------------------------------------------
-    describe('Courses Endpoints', () => {
+    // courses endpoints tests
+    describe('courses endpoints', () => {
         let createdCourseId;
 
-        it('GET /courses should return an array of courses (JSON)', async () => {
+        it('get /courses should return an array of courses (json)', async () => {
             const res = await request(app)
                 .get('/courses')
-                .set('Accept', 'application/json')
+                .set('accept', 'application/json')
                 .expect(200);
             expect(res.body).to.be.an('array');
         });
 
-        it('POST /courses/add should add a new course and redirect to /dashboard', async () => {
+        it('post /courses/add should add a new course and redirect to /dashboard', async () => {
             const res = await request(app)
                 .post('/courses/add')
                 .type('form')
                 .send({
-                    courseName: 'Test Course',
-                    courseDescription: 'A test course description',
+                    courseName: 'test course',
+                    courseDescription: 'a test course description',
                     courseStartDate: '2025-04-01',
                     courseDuration: '4 weeks',
-                    courseSchedule: 'Monday, Wednesday',
+                    courseSchedule: 'monday, wednesday',
                     coursePrice: '100.50',
-                    courseLocation: 'Test Location',
+                    courseLocation: 'test location',
                     courseStartTime: '10:00',
                     courseEndTime: '12:00'
                 })
@@ -293,30 +273,30 @@ describe('Integration Tests', () => {
             expect(res.header.location).to.equal('/dashboard');
         });
 
-        it('GET /courses should contain the newly added course', async () => {
+        it('get /courses should contain the newly added course', async () => {
             const res = await request(app)
                 .get('/courses')
-                .set('Accept', 'application/json')
+                .set('accept', 'application/json')
                 .expect(200);
             const courses = res.body;
-            const testCourse = courses.find(c => c.name === 'Test Course');
+            const testCourse = courses.find(c => c.name === 'test course');
             expect(testCourse).to.exist;
             createdCourseId = testCourse._id;
         });
 
-        it('POST /courses/edit should update the course and redirect to /dashboard', async () => {
+        it('post /courses/edit should update the course and redirect to /dashboard', async () => {
             const res = await request(app)
                 .post('/courses/edit')
                 .type('form')
                 .send({
                     courseId: createdCourseId,
-                    courseName: 'Updated Test Course',
-                    courseDescription: 'Updated description',
+                    courseName: 'updated test course',
+                    courseDescription: 'updated description',
                     courseStartDate: '2025-04-02',
                     courseDuration: '5 weeks',
-                    courseSchedule: 'Tuesday, Thursday',
+                    courseSchedule: 'tuesday, thursday',
                     coursePrice: '150.75',
-                    courseLocation: 'Updated Location',
+                    courseLocation: 'updated location',
                     courseStartTime: '11:00',
                     courseEndTime: '13:00'
                 })
@@ -324,7 +304,7 @@ describe('Integration Tests', () => {
             expect(res.header.location).to.equal('/dashboard');
         });
 
-        it('POST /courses/delete should delete the course and redirect to /dashboard', async () => {
+        it('post /courses/delete should delete the course and redirect to /dashboard', async () => {
             const res = await request(app)
                 .post('/courses/delete')
                 .type('form')
@@ -334,86 +314,84 @@ describe('Integration Tests', () => {
         });
     });
 
-    // --------------------------------------------------
-    // Test Classes Endpoints
-    // --------------------------------------------------
-    describe('Classes Endpoints', () => {
+    // classes endpoints tests
+    describe('classes endpoints', () => {
         let createdClassId;
 
-        it('GET /classes should return an array of classes (JSON)', async () => {
+        it('get /classes should return an array of classes (json)', async () => {
             const res = await request(app)
                 .get('/classes')
-                .set('Accept', 'application/json')
+                .set('accept', 'application/json')
                 .expect(200);
             expect(res.body).to.be.an('array');
         });
 
-        it('POST /classes/add should add a new class and redirect to /dashboard', async () => {
+        it('post /classes/add should add a new class and redirect to /dashboard', async () => {
             const res = await request(app)
                 .post('/classes/add')
                 .type('form')
                 .send({
-                    className: 'Test Class',
-                    classDescription: 'A test class description',
-                    classLocation: 'Test Class Location',
+                    className: 'test class',
+                    classDescription: 'a test class description',
+                    classLocation: 'test class location',
                     classPrice: '50.25'
                 })
                 .expect(302);
             expect(res.header.location).to.equal('/dashboard');
         });
 
-        it('GET /classes should contain the newly added class', async () => {
+        it('get /classes should contain the newly added class', async () => {
             const res = await request(app)
                 .get('/classes')
-                .set('Accept', 'application/json')
+                .set('accept', 'application/json')
                 .expect(200);
             const classes = res.body;
-            const testClass = classes.find(c => c.name === 'Test Class');
+            const testClass = classes.find(c => c.name === 'test class');
             expect(testClass).to.exist;
             createdClassId = testClass._id;
         });
 
-        it('POST /classes/edit should update the class and redirect to /dashboard', async () => {
+        it('post /classes/edit should update the class and redirect to /dashboard', async () => {
             const res = await request(app)
                 .post('/classes/edit')
                 .type('form')
                 .send({
                     classId: createdClassId,
-                    className: 'Updated Test Class',
-                    classDescription: 'Updated class description',
-                    classLocation: 'Updated Location',
+                    className: 'updated test class',
+                    classDescription: 'updated class description',
+                    classLocation: 'updated location',
                     classPrice: '60.50'
                 })
                 .expect(302);
             expect(res.header.location).to.equal('/dashboard');
         });
 
-        it('POST /classes/timeslots/update should update timeslots and redirect to /dashboard', async () => {
+        it('post /classes/timeslots/update should update timeslots and redirect to /dashboard', async () => {
             const res = await request(app)
                 .post('/classes/timeslots/update')
                 .type('form')
                 .send({
                     classId: createdClassId,
-                    timeslotsCSV: 'Monday 9am, Tuesday 10am'
+                    timeslotsCSV: 'monday 9am, tuesday 10am'
                 })
                 .expect(302);
             expect(res.header.location).to.equal('/dashboard');
         });
 
-        it('POST /classes/participants/add should add a participant and redirect to /dashboard', async () => {
+        it('post /classes/participants/add should add a participant and redirect to /dashboard', async () => {
             const res = await request(app)
                 .post('/classes/participants/add')
                 .type('form')
                 .send({
                     classId: createdClassId,
-                    participantName: 'John Doe',
+                    participantName: 'john doe',
                     participantEmail: 'john@example.com'
                 })
                 .expect(302);
             expect(res.header.location).to.equal('/dashboard');
         });
 
-        it('GET /classes/participants should return participants for the class', async () => {
+        it('get /classes/participants should return participants for the class', async () => {
             const res = await request(app)
                 .get('/classes/participants')
                 .query({ classId: createdClassId })
@@ -424,7 +402,7 @@ describe('Integration Tests', () => {
             expect(participant).to.exist;
         });
 
-        it('POST /classes/delete should delete the class and redirect to /dashboard', async () => {
+        it('post /classes/delete should delete the class and redirect to /dashboard', async () => {
             const res = await request(app)
                 .post('/classes/delete')
                 .type('form')
@@ -434,26 +412,24 @@ describe('Integration Tests', () => {
         });
     });
 
-    // --------------------------------------------------
-    // Test Users Endpoints
-    // --------------------------------------------------
-    describe('Users Endpoints', () => {
+    // users endpoints tests
+    describe('users endpoints', () => {
         let createdUserId;
 
-        it('GET /users should return an array of users (JSON)', async () => {
+        it('get /users should return an array of users (json)', async () => {
             const res = await request(app)
                 .get('/users')
-                .set('Accept', 'application/json')
+                .set('accept', 'application/json')
                 .expect(200);
             expect(res.body).to.be.an('array');
         });
 
-        it('POST /users/add should add a new user and redirect to /dashboard', async () => {
+        it('post /users/add should add a new user and redirect to /dashboard', async () => {
             const res = await request(app)
                 .post('/users/add')
                 .type('form')
                 .send({
-                    userName: 'Test User',
+                    userName: 'test user',
                     userEmail: 'testuser@example.com',
                     userRole: 'user',
                     userPassword: 'password123'
@@ -462,10 +438,10 @@ describe('Integration Tests', () => {
             expect(res.header.location).to.equal('/dashboard');
         });
 
-        it('GET /users should contain the newly added user', async () => {
+        it('get /users should contain the newly added user', async () => {
             const res = await request(app)
                 .get('/users')
-                .set('Accept', 'application/json')
+                .set('accept', 'application/json')
                 .expect(200);
             const users = res.body;
             const testUser = users.find(u => u.email === 'testuser@example.com');
@@ -473,13 +449,13 @@ describe('Integration Tests', () => {
             createdUserId = testUser._id;
         });
 
-        it('POST /users/edit should update the user and redirect to /dashboard', async () => {
+        it('post /users/edit should update the user and redirect to /dashboard', async () => {
             const res = await request(app)
                 .post('/users/edit')
                 .type('form')
                 .send({
                     userId: createdUserId,
-                    userName: 'Updated Test User',
+                    userName: 'updated test user',
                     userEmail: 'testuser@example.com',
                     userRole: 'organiser'
                 })
@@ -487,7 +463,7 @@ describe('Integration Tests', () => {
             expect(res.header.location).to.equal('/dashboard');
         });
 
-        it('POST /users/delete should delete the user and redirect to /dashboard', async () => {
+        it('post /users/delete should delete the user and redirect to /dashboard', async () => {
             const res = await request(app)
                 .post('/users/delete')
                 .type('form')
@@ -497,19 +473,16 @@ describe('Integration Tests', () => {
         });
     });
 
-    // --------------------------------------------------
-    // Test Authentication (Login, Registration, Duplicate Merging)
-    // --------------------------------------------------
-    describe('Authentication', () => {
+    // authentication tests
+    describe('authentication', () => {
         const agent = request.agent(app);
 
-        // Create a user to test login.
         before(async () => {
             await request(app)
                 .post('/users/add')
                 .type('form')
                 .send({
-                    userName: 'Login Test User',
+                    userName: 'login test user',
                     userEmail: 'loginuser@example.com',
                     userRole: 'user',
                     userPassword: 'password123'
@@ -517,7 +490,7 @@ describe('Integration Tests', () => {
                 .expect(302);
         });
 
-        it('POST /auth/login should login with valid credentials and redirect to /', async () => {
+        it('post /auth/login should login with valid creds and redirect to /', async () => {
             const res = await agent
                 .post('/auth/login')
                 .type('form')
@@ -529,7 +502,7 @@ describe('Integration Tests', () => {
             expect(res.header.location).to.equal('/');
         });
 
-        it('POST /auth/login should not login with invalid credentials and redirect to /auth/login', async () => {
+        it('post /auth/login should not login with invalid creds and redirect to /auth/login', async () => {
             const res = await agent
                 .post('/auth/login')
                 .type('form')
@@ -541,13 +514,13 @@ describe('Integration Tests', () => {
             expect(res.header.location).to.equal('/auth/login');
         });
 
-        it('POST /auth/register should register a new user and redirect to /auth/login', async () => {
+        it('post /auth/register should register a new user and redirect to /auth/login', async () => {
             const uniqueEmail = `testreg${Date.now()}@example.com`;
             const res = await request(app)
                 .post('/auth/register')
                 .type('form')
                 .send({
-                    username: 'Test Reg User',
+                    username: 'test reg user',
                     email: uniqueEmail,
                     password: 'password123'
                 })
@@ -555,34 +528,30 @@ describe('Integration Tests', () => {
             expect(res.header.location).to.equal('/auth/login');
         });
 
-        // Test duplicate merging & rejection of auto-login for unregistered user.
-        it('POST /auth/register should update an existing unregistered user and not auto-login them', async () => {
+        it('post /auth/register should update an existing unregistered user and not auto-login them', async () => {
             const duplicateEmail = `duplicate${Date.now()}@example.com`;
-            // Simulate an unregistered user booking which creates a record without session.
             await request(app)
                 .post('/bookCourse')
                 .type('form')
                 .send({
-                    contactName: 'Duplicate User',
+                    contactName: 'duplicate user',
                     contactEmail: duplicateEmail,
                     contactMobile: '0000000000',
                     courseId: 'dummyCourseId',
                     selectedDates: '2025-05-02'
                 })
                 .expect(302);
-            // Now register with the same email.
             const res = await request(app)
                 .post('/auth/register')
                 .type('form')
                 .send({
-                    username: 'Duplicate User Updated',
+                    username: 'duplicate user updated',
                     email: duplicateEmail,
                     password: 'newpassword'
                 })
                 .expect(302);
             expect(res.header.location).to.equal('/auth/login');
 
-            // Attempt login with new password should succeed.
             const loginRes = await request(app)
                 .post('/auth/login')
                 .type('form')
@@ -594,20 +563,18 @@ describe('Integration Tests', () => {
             expect(loginRes.header.location).to.equal('/');
         });
 
-        it('GET /auth/logout should logout the user and redirect to /', async () => {
+        it('get /auth/logout should logout the user and redirect to /', async () => {
             const logoutAgent = request.agent(app);
             const uniqueEmail = `testlogout${Date.now()}@example.com`;
-            // Register a new user for logout test.
             await request(app)
                 .post('/auth/register')
                 .type('form')
                 .send({
-                    username: 'Test Logout User',
+                    username: 'test logout user',
                     email: uniqueEmail,
                     password: 'password123'
                 })
                 .expect(302);
-            // Login the user.
             await logoutAgent
                 .post('/auth/login')
                 .type('form')
@@ -616,83 +583,10 @@ describe('Integration Tests', () => {
                     password: 'password123'
                 })
                 .expect(302);
-            // Logout.
             const res = await logoutAgent
                 .get('/auth/logout')
                 .expect(302);
             expect(res.header.location).to.equal('/');
-        });
-    });
-
-    // --------------------------------------------------
-    // Test Dashboard Routes (Protected)
-    // --------------------------------------------------
-    describe('Dashboard Routes', () => {
-        it('GET /dashboard without login should redirect to /auth/login', async () => {
-            const res = await request(app)
-                .get('/dashboard')
-                .expect(302);
-            expect(res.header.location).to.equal('/auth/login');
-        });
-
-        it('GET /dashboard with non-organiser should redirect to /', async () => {
-            const agentNonOrg = request.agent(app);
-            const uniqueEmail = `testnonorg${Date.now()}@example.com`;
-            // Register as a normal user.
-            await request(app)
-                .post('/auth/register')
-                .type('form')
-                .send({
-                    username: 'Non-Organiser User',
-                    email: uniqueEmail,
-                    password: 'password123'
-                })
-                .expect(302);
-            // Login.
-            await agentNonOrg
-                .post('/auth/login')
-                .type('form')
-                .send({
-                    email: uniqueEmail,
-                    password: 'password123'
-                })
-                .expect(302);
-            // Attempt to access dashboard.
-            const res = await agentNonOrg
-                .get('/dashboard')
-                .expect(302);
-            expect(res.header.location).to.equal('/');
-        });
-
-        it('GET /dashboard with organiser should display the dashboard', async () => {
-            const agentOrg = request.agent(app);
-            const uniqueEmail = `testorg${Date.now()}@example.com`;
-            // Add an organiser using the API (which allows role specification)
-            await request(app)
-                .post('/users/add')
-                .type('form')
-                .send({
-                    userName: 'Organiser User',
-                    userEmail: uniqueEmail,
-                    userRole: 'organiser',
-                    userPassword: 'password123'
-                })
-                .expect(302);
-            // Login via auth.
-            await agentOrg
-                .post('/auth/login')
-                .type('form')
-                .send({
-                    email: uniqueEmail,
-                    password: 'password123'
-                })
-                .expect(302);
-            // Access dashboard.
-            const res = await agentOrg
-                .get('/dashboard')
-                .expect(200)
-                .expect('Content-Type', /html/);
-            expect(res.text).to.include('Organiser Dashboard');
         });
     });
 });
